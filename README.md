@@ -3,15 +3,15 @@
 
 ## 컨벤션
 ### 태그
-[Feat]: 새로운 기능 개발
-[Fix]: 오류 및 잘못된 코드 수정
-[Design]: UI(composable 구성 등) 작업
-[Chore]: 사소한 작업, 기타 (e.g., 주석 추가 등)
-[Refactor]: 코드 전체 개선 및 수정
-[Del]: 파일 삭제
-[Add]: 파일 추가
-[Setting]: 프로젝트 및 환경 세팅
-[Network]: 서버 연결 작업 (API 통합 등)
+- [Feat]: 새로운 기능 개발
+- [Fix]: 오류 및 잘못된 코드 수정
+- [Design]: UI(composable 구성 등) 작업
+- [Chore]: 사소한 작업, 기타 (e.g., 주석 추가 등)
+- [Refactor]: 코드 전체 개선 및 수정
+- [Del]: 파일 삭제
+- [Add]: 파일 추가
+- [Setting]: 프로젝트 및 환경 세팅
+- [Network]: 서버 연결 작업 (API 통합 등)
 <br><br>
 
 ### Issue
