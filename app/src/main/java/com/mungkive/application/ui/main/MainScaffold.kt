@@ -1,6 +1,7 @@
 package com.mungkive.application.ui.main
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
@@ -38,6 +39,7 @@ fun MainScaffold(navController: NavHostController) {
             if (currentRoute == Routes.Feed) {
                 FloatingActionButton(
                     onClick = { navController.navigate(Routes.FeedWrite.route) },
+                    shape = CircleShape,
                     containerColor = Color(0xFFEBF3FF)
                 ) {
                     Icon(

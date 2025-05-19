@@ -23,7 +23,7 @@ fun MainNavGraph(
         modifier = modifier
     ) {
         composable(Routes.Map.route) { MapView() }
-        composable(Routes.Feed.route) { FeedListView() }
+        composable(Routes.Feed.route) { FeedListView(onFeedClick = {}, onWriteClick = {}) }
         composable(Routes.Tip.route) { TipListView() }
         composable(Routes.Profile.route) { ProfileView() }
         composable(Routes.FeedWrite.route) { FeedWritingView(navController) }
