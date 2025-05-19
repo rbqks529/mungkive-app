@@ -1,4 +1,4 @@
-package com.mungkive.application.uicomponents
+package com.mungkive.application.ui.login
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
