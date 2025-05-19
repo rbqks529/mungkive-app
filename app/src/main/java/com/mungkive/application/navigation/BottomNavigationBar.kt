@@ -12,7 +12,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.mungkive.application.model.NavBarItems
+import com.mungkive.application.models.NavBarItems
 
 @Composable
 fun BottomNavigationBar(navController: NavController) {

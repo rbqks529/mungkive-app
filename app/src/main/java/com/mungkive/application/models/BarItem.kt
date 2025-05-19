@@ -1,4 +1,4 @@
-package com.mungkive.application.model
+package com.mungkive.application.models
 
 data class BarItem(
     val title: String,
