@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.mungkive.application.model.Routes
+import com.mungkive.application.models.Routes
 import com.mungkive.application.ui.login.LoginView
 import com.mungkive.application.ui.login.WelcomeView
 import com.mungkive.application.ui.profile.ProfileView

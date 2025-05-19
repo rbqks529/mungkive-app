@@ -1,4 +1,4 @@
-package com.mungkive.application.model
+package com.mungkive.application.models
 
 
 sealed class Routes(val route: String, val isRoot: Boolean = true) {
@@ -14,6 +14,7 @@ sealed class Routes(val route: String, val isRoot: Boolean = true) {
     object Profile : Routes("Profile")
 
     //Detail 경로
+    object FeedWrite : Routes("FeedWrite")
     object DetailFeed : Routes("DetailFeed")
 
     companion object {
@@ -28,6 +29,7 @@ sealed class Routes(val route: String, val isRoot: Boolean = true) {
                 Tip.route -> Tip
                 Profile.route -> Profile
                 //Detail
+                FeedWrite.route -> FeedWrite
                 DetailFeed.route -> DetailFeed
                 else -> Feed
             }
