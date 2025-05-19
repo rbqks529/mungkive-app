@@ -6,6 +6,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.navigation.NavController
@@ -16,7 +17,9 @@ import com.mungkive.application.model.NavBarItems
 @Composable
 fun BottomNavigationBar(navController: NavController) {
 
-    NavigationBar {
+    NavigationBar(
+        containerColor = Color(0xFFEBF3FF)
+    ) {
         val backStackEntry by navController.currentBackStackEntryAsState()  // 현재 backStackEntry의 정보
         val currentRoute = backStackEntry?.destination?.route   // backStackEntry에서 현재 route를 가져올 수 있음
 
