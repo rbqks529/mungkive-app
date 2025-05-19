@@ -167,5 +167,6 @@ fun FeedCardPreview() {
         date = "2025. 5. 15. 14:32",
         content = "오늘 즐거운 산책~"
     )
+
     FeedCard(feed = sampleFeed, onClick = {})
 }
