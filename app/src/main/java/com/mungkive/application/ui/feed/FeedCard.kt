@@ -34,6 +34,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -99,6 +100,7 @@ fun FeedCard(feed: FeedData, onClick: () -> Unit) {
                 Modifier.padding(start = 10.dp, top = 9.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
+                // TODO: 좋아요 로직 
                 IconButton(
                     onClick = {},
                     modifier = Modifier
@@ -117,6 +119,7 @@ fun FeedCard(feed: FeedData, onClick: () -> Unit) {
                     modifier = Modifier.padding(start = 2.dp, end = 12.dp)
                 )
 
+                // TODO: 댓글 로직 
                 IconButton(
                     onClick = {},
                     modifier = Modifier
@@ -144,9 +147,11 @@ fun FeedCard(feed: FeedData, onClick: () -> Unit) {
             )
             Text(
                 text = feed.content,
-                fontWeight = FontWeight.W400,
+                fontWeight = FontWeight.W500,
                 fontSize = 12.sp,
-                modifier = Modifier.padding(start = 10.dp, bottom = 17.dp)
+                modifier = Modifier.padding(start = 10.dp, bottom = 17.dp, end = 9.dp),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis // ... 표시
             )
         }
     }

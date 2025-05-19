@@ -24,19 +24,12 @@ import com.mungkive.application.navigation.MainNavGraph
 @Composable
 fun MainScaffold(navController: NavHostController) {
     val backStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute by remember(backStackEntry) {
-        derivedStateOf {
-            backStackEntry?.destination?.route?.let {
-                Routes.getRoutes(it)
-            } ?: run {
-                Routes.Feed
-            }
-        }
-    }
+
     Scaffold(
         bottomBar = { BottomNavigationBar(navController) },
         floatingActionButton = {
-            if (currentRoute == Routes.Feed) {
+            // 정확히 'feed' route일 때만
+            if (backStackEntry?.destination?.route == Routes.Feed.route) {
                 FloatingActionButton(
                     onClick = { navController.navigate(Routes.FeedWrite.route) },
                     shape = CircleShape,
@@ -49,6 +42,7 @@ fun MainScaffold(navController: NavHostController) {
                 }
             }
         }
+
     ) { innerPadding ->
         MainNavGraph(
             navController = navController,
