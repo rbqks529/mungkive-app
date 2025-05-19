@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import com.mungkive.application.model.Routes
 import com.mungkive.application.ui.login.LoginView
 import com.mungkive.application.ui.login.WelcomeView
+import com.mungkive.application.ui.profile.ProfileView
 
 @Composable
 fun AuthNavGraph(
@@ -30,11 +31,11 @@ fun AuthNavGraph(
             )
         }
         composable(Routes.AddProfile.route) {
-            /*ProfileAddView(
-                onProfileSaved = {
+            ProfileView(
+                /*onProfileSaved = {
                     onLoginSuccess() // 최초 회원가입시 바로 인증 처리
-                }
-            )*/
+                }*/
+            )
         }
     }
 }
