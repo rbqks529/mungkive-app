@@ -21,16 +21,16 @@ import com.naver.maps.map.overlay.OverlayImage
 @OptIn(ExperimentalNaverMapApi::class)
 @Composable
 fun MapView(modifier: Modifier = Modifier) {
-    //테스트 용 건국대주변 좌표
+    //테스트 용 건국대 공학관 주변 좌표
     val markerList = listOf(
         LatLng(37.5413, 127.0793), // 공학관
         LatLng(37.5435, 127.0774), // 새천년관
         LatLng(37.5404, 127.0793)  // 신공학관
     )
-
     val markerIcon = OverlayImage.fromResource(R.drawable.dummyprofile)
 
     val cameraPositionState = rememberCameraPositionState{position = CameraPosition(markerList[0], 15.0)}
+
     NaverMap(
         modifier = Modifier.fillMaxSize(),
         cameraPositionState = cameraPositionState
