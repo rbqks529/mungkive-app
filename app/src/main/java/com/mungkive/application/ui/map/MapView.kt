@@ -1,16 +1,12 @@
 package com.mungkive.application.ui.map
 
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.modifier.modifierLocalConsumer
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mungkive.application.R
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraPosition
-import com.naver.maps.map.MapView
 import com.naver.maps.map.compose.ExperimentalNaverMapApi
 import com.naver.maps.map.compose.Marker
 import com.naver.maps.map.compose.NaverMap
