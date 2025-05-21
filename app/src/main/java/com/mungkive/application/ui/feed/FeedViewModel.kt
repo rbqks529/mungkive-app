@@ -1,16 +1,20 @@
 package com.mungkive.application.ui.feed
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 
 class FeedViewModel : ViewModel() {
+    // 피드 데이터
     private val _feedList = MutableStateFlow<List<FeedData>>(emptyList())
     val feedList: StateFlow<List<FeedData>> = _feedList
 
+    // 피드별 댓글 Map (id -> List<CommentData>)
+    private val _commentsMap = MutableStateFlow<Map<String, List<CommentData>>>(emptyMap())
+    val commentsMap: StateFlow<Map<String, List<CommentData>>> = _commentsMap
+
     // 서버에서 데이터 불러오기 (repository/network 사용)
+    // TODO: 서버에서 피드 가져오기 추가
     fun fetchFeeds() {
         /*viewModelScope.launch {
             val data = repository.getFeeds() // suspend fun
@@ -39,8 +43,41 @@ class FeedViewModel : ViewModel() {
                 likeCount = 98,
                 commentCount = 23,
                 date = "2025. 5. 15. 11:19",
-                content = "오늘은 예쁘게 미용한 날!!"
+                content = "오늘은 예쁘게 미용한 날!! 오늘은 예쁘게 미용한 날!! 오늘은 예쁘게 미용한 날!! 오늘은 예쁘게 미용한 날!! 오늘은 예쁘게 미용한 날!!"
             )
         )
+
+        // 각 피드 id별 댓글 예시 데이터
+        _commentsMap.value = mapOf(
+            "1" to listOf(
+                CommentData(
+                    userProfileUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQq4wyRh015KWJNfUC6qQz4M3qya3SqUj84rw&s",
+                    userName = "감자",
+                    content = "정말 귀엽네요!"
+                ),
+                CommentData(
+                    userProfileUrl = "https://blog.kakaocdn.net/dn/bh3xaW/btrd04olbd6/HkQMeUpJsB6D3GcVdXfrc1/img.jpg",
+                    userName = "쌀",
+                    content = "산책 좋아보여요~"
+                ),
+            ),
+            "2" to listOf(
+                CommentData(
+                    userProfileUrl = "https://blog.kakaocdn.net/dn/bh3xaW/btrd04olbd6/HkQMeUpJsB6D3GcVdXfrc1/img.jpg",
+                    userName = "이수현",
+                    content = "비숑 너무 예뻐요!"
+                ),
+            )
+        )
+    }
+
+    // id로 FeedData 찾기
+    fun getFeedById(feedId: String): FeedData? {
+        return feedList.value.find { it.id == feedId }
+    }
+
+    // 댓글 반환 함수
+    fun getComments(feedId: String): List<CommentData> {
+        return commentsMap.value[feedId] ?: emptyList()
     }
 }
