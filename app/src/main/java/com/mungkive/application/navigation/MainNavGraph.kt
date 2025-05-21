@@ -14,7 +14,7 @@ import com.mungkive.application.ui.feed.FeedDetailView
 import com.mungkive.application.ui.feed.FeedViewModel
 import com.mungkive.application.ui.feed.FeedWritingView
 import com.mungkive.application.ui.map.MapView
-import com.mungkive.application.ui.profile.ProfileView
+import ProfileView
 import com.mungkive.application.ui.tip.TipListView
 
 @Composable

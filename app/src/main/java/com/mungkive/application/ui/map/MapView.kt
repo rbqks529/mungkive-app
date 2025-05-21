@@ -36,7 +36,8 @@ fun MapView(modifier: Modifier = Modifier) {
                 state = rememberMarkerState(position = latLng),
                 icon = markerIcon,
                 width = 40.dp,
-                height = 40.dp
+                height = 40.dp,
+
             )
         }
     }
