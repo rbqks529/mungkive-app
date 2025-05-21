@@ -15,6 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Mungkive"
         tools:targetApi="31">
+        <meta-data
+            android:name="com.naver.maps.map.NCP_KEY_ID"
+            android:value="ukd0rbss0s" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
