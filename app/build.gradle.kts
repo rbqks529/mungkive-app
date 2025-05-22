@@ -1,3 +1,6 @@
+import org.gradle.kotlin.dsl.implementation
+import org.jetbrains.kotlin.gradle.idea.proto.com.google.protobuf.SourceCodeInfoKt.location
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -53,8 +56,12 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation("io.coil-kt.coil3:coil-compose:3.2.0")
     implementation("io.coil-kt.coil3:coil-network-okhttp:3.2.0")
+    implementation ("com.google.android.gms:play-services-location:21.0.1")
     implementation(libs.map.sdk)
     implementation(libs.naver.map.compose)
+    implementation(libs.accompanist.permissions)
+    implementation(libs.converter.gson)
+    implementation(libs.retrofit)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

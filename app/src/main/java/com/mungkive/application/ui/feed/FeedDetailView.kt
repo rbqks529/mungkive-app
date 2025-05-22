@@ -78,7 +78,7 @@ fun FeedDetailView(
             Row(
                 Modifier
                     .fillMaxWidth()
-                    .padding(top = 32.dp, bottom = 4.dp),
+                    .padding(top = 20.dp, bottom = 4.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 IconButton(onClick = {
@@ -222,7 +222,7 @@ fun FeedDetailView(
                             model = comment.userProfileUrl,
                             contentDescription = null,
                             modifier = Modifier
-                                .size(24.dp)
+                                .size(18.dp)
                                 .clip(CircleShape)
                         )
                         Spacer(modifier = Modifier.width(8.dp))
@@ -256,7 +256,6 @@ fun FeedDetailView(
                 value = commentText,
                 onValueChange = { commentText = it },
                 modifier = Modifier
-                    .defaultMinSize(minHeight = 41.dp)
                     .weight(1f),
                 shape = androidx.compose.foundation.shape.RoundedCornerShape(8.dp),
                 placeholder = { Text("댓글을 입력하세요", fontSize = 12.sp) },
