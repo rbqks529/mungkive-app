@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mungkive.application.ui.feed.FeedCard
-import com.mungkive.application.ui.feed.FeedData
+import com.mungkive.application.ui.feed.data.FeedData
 import com.mungkive.application.ui.feed.FeedViewModel
 
 @Composable
@@ -60,7 +60,7 @@ fun FeedListView(
                     style = MaterialTheme.typography.headlineLarge,
                     fontWeight = FontWeight.W700,
                     fontSize = 24.sp,
-                    modifier = Modifier.padding(start = 19.dp, top = 32.dp, bottom = 4.dp)
+                    modifier = Modifier.padding(start = 19.dp, top = 24.dp, bottom = 4.dp)
                 )
             }
 

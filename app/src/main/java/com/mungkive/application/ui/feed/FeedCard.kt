@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.mungkive.application.R
+import com.mungkive.application.ui.feed.data.FeedData
 
 @Composable
 fun FeedCard(feed: FeedData, onClick: () -> Unit) {

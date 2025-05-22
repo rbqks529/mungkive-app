@@ -1,6 +1,8 @@
 package com.mungkive.application.ui.feed
 
 import androidx.lifecycle.ViewModel
+import com.mungkive.application.ui.feed.data.CommentData
+import com.mungkive.application.ui.feed.data.FeedData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
