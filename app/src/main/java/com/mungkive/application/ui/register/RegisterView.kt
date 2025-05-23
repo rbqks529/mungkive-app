@@ -152,7 +152,8 @@ fun RegisterView(modifier: Modifier = Modifier) {
                 modifier = Modifier
                     .fillMaxWidth(0.85f)
                     .height(50.dp),
-                enabled = (passwordText1.isNotEmpty() && passwordText1 == passwordText2)
+                enabled = (idText.isNotEmpty()
+                        && passwordText1.isNotEmpty() && passwordText1 == passwordText2)
             ) {
                 Text(text = "가입하기", fontWeight = FontWeight.Bold, fontSize = 16.sp)
             }
