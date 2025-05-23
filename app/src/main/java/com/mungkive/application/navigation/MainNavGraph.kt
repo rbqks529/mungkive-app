@@ -14,7 +14,10 @@ import com.mungkive.application.ui.feed.FeedDetailView
 import com.mungkive.application.ui.feed.FeedViewModel
 import com.mungkive.application.ui.feed.FeedWritingView
 import com.mungkive.application.ui.map.MapView
-import com.mungkive.application.ui.profile.ProfileView
+import ProfileView
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import com.mungkive.application.ui.tip.TipListView
 
 @Composable
@@ -27,7 +30,22 @@ fun MainNavGraph(
         startDestination = Routes.Feed.route,
         modifier = modifier
     ) {
-        composable(Routes.Map.route) { MapView() }
+        composable(Routes.Map.route) {
+            val feedViewModel: FeedViewModel = viewModel()
+            val feedList by feedViewModel.feedList.collectAsState()
+
+            // 🔥 ViewModel에서 데이터를 불러오도록 호출
+            LaunchedEffect(Unit) {
+                feedViewModel.fetchFeeds()
+            }
+
+            MapView(
+                feedList = feedList,
+                onFeedSelected = { feedId ->
+                    navController.navigate("${Routes.DetailFeed.route}/$feedId")
+                }
+            )
+        }
         composable(Routes.Feed.route) { backStackEntry ->
             // 1. parentEntry로 NavGraph Scope ViewModel을 만듦
             val parentEntry = remember(backStackEntry) {
