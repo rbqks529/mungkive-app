@@ -20,15 +20,9 @@ fun MapView(
     feedList: List<FeedData>,
     onFeedSelected: (String) -> Unit
 ) {
-    LaunchedEffect(feedList) {
-        Log.d("FeedDebug", "feedList 크기: ${feedList.size}")
-        feedList.forEachIndexed { i, feed ->
-            Log.d("FeedDebug", "feed[$i].imageUrl = '${feed.imageUrl}'")
-        }
-    }
-
     val context = LocalContext.current
-
+    // FeedData에 GPS 좌표 추가 (LatLng)
+    // 추후에 FeedData에 좌표값 추가되면 수정필요
     val markerFeedList = listOf(
         MapMarkerData(LatLng(37.5413, 127.0793), feed = feedList.getOrNull(0)),
         MapMarkerData(LatLng(37.5435, 127.0774), feed = feedList.getOrNull(1)),
@@ -52,13 +46,10 @@ fun MapView(
                     url = urlImg,
                     context = context,
                     onClick = {
-                        Log.d("MapView", "🖱️ 마커 클릭됨: ${marker.feed?.id}")
                         marker.feed?.let { onFeedSelected(it.id) }
                         true
                     }
                 )
-            } else {
-                Log.w("OverlayDebug", "urlImg 없음 → 마커 생략")
             }
         }
     }
