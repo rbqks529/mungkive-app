@@ -27,20 +27,20 @@ fun MarkerWithUrlIcon(
 
     LaunchedEffect(url) {
         val result = loadUrlToOverlayImage(context, url)
-        Log.d("OverlayDebug", "🧩 OverlayImage 결과: $result")
+        Log.d("OverlayDebug", "OverlayImage 결과: $result")
         overlayImageState.value = result
     }
 
     if (overlayImageState.value != null) {
-        Log.d("OverlayDebug", "🟢 Marker 생성됨 at $position")
+        Log.d("OverlayDebug", "Marker 생성됨 at $position")
     }
 
     overlayImageState.value?.let { overlay ->
         Marker(
             state = rememberMarkerState(position = position),
             icon = overlay,
-            width = 40.dp,
-            height = 40.dp,
+            width = 50.dp,
+            height = 50.dp,
             onClick = {
                 onClick()
                 true

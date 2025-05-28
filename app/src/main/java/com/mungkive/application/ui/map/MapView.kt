@@ -10,6 +10,8 @@ import com.mungkive.application.ui.feed.FeedData
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraPosition
 import com.naver.maps.map.compose.ExperimentalNaverMapApi
+import com.naver.maps.map.compose.LocationTrackingMode
+import com.naver.maps.map.compose.MapProperties
 import com.naver.maps.map.compose.NaverMap
 import com.naver.maps.map.compose.rememberCameraPositionState
 
@@ -37,6 +39,10 @@ fun MapView(
     NaverMap(
         modifier = Modifier.fillMaxSize(),
         cameraPositionState = cameraPositionState
+        // 카메라 설정 및 현재 위치 갱신 버튼
+//        properties = MapProperties(
+//            LocationTrackingMode.
+//        )
     ) {
         markerFeedList.forEach { marker ->
             val urlImg = marker.feed?.imageUrl

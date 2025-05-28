@@ -29,7 +29,10 @@ suspend fun loadUrlToOverlayImage(context: Context, imageUrl: String): OverlayIm
         if (result is SuccessResult) {
             val image = result.image
             val bitmap: Bitmap? = image.toBitmap()
-            bitmap?.let { OverlayImage.fromBitmap(it) }
+
+            val circularbitmap = bitmap?.let { BitmapToCircularBitmap(it,300) }
+            circularbitmap?.let { OverlayImage.fromBitmap(it) }
+            //bitmap?.let { OverlayImage.fromBitmap(it) }
         } else {
             null
         }
