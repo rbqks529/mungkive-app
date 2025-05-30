@@ -8,6 +8,8 @@ import androidx.navigation.compose.composable
 import com.mungkive.application.models.Routes
 import com.mungkive.application.ui.login.LoginView
 import com.mungkive.application.ui.login.WelcomeView
+import ProfileView
+
 
 @Composable
 fun AuthNavGraph(

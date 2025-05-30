@@ -1,4 +1,5 @@
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -19,6 +20,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,15 +38,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mungkive.application.R
 import com.mungkive.application.models.ProfileViewStatus
+import com.mungkive.application.viewmodels.ProfileViewModel
 
+@SuppressLint("ViewModelConstructorInComposable")
 @Composable
 fun ProfileView(
     modifier: Modifier = Modifier,
-    status: ProfileViewStatus = ProfileViewStatus.VIEW
+    viewModel: ProfileViewModel = ProfileViewModel()
 ) {
     var nameText by remember { mutableStateOf("") }
     var dogTypeText by remember { mutableStateOf("") }
     var yearText by remember { mutableStateOf("") }
+
+    LaunchedEffect(Unit) {
+        viewModel.fetchProfileData()
+    }
 
     Column(
         modifier = modifier
@@ -53,7 +61,7 @@ fun ProfileView(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
-        if (status == ProfileViewStatus.REGISTER) {
+        if (viewModel.status.value == ProfileViewStatus.REGISTER) {
             Text(
                 text = "애견 프로필을 등록해주세요",
                 fontSize = 24.sp,
@@ -68,16 +76,16 @@ fun ProfileView(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    "NAME의 프로필",
+                    "${viewModel.profile.value.name}의 프로필",
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Left
                 )
 
-                if (status == ProfileViewStatus.EDIT) {
+                if (viewModel.status.value == ProfileViewStatus.EDIT) {
                     Box(
                         modifier = Modifier.clickable {
-                            // TODO
+                            viewModel.setStatus(ProfileViewStatus.VIEW)
                         }.padding(vertical = 16.dp).padding(start = 16.dp),
                         contentAlignment = Alignment.Center
                     ) {
@@ -89,7 +97,7 @@ fun ProfileView(
                 } else {
                     Box(
                         modifier = Modifier.clickable {
-                            // TODO
+                            viewModel.setStatus(ProfileViewStatus.EDIT)
                         }.padding(vertical = 16.dp).padding(start = 16.dp),
                         contentAlignment = Alignment.Center
                     ) {
@@ -122,7 +130,7 @@ fun ProfileView(
                 .fillMaxWidth()
                 .height(56.dp),
             shape = RoundedCornerShape(8.dp),
-            enabled = (status != ProfileViewStatus.VIEW)
+            enabled = (viewModel.status.value != ProfileViewStatus.VIEW)
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -137,7 +145,7 @@ fun ProfileView(
                 .fillMaxWidth()
                 .height(56.dp),
             shape = RoundedCornerShape(8.dp),
-            enabled = (status != ProfileViewStatus.VIEW)
+            enabled = (viewModel.status.value != ProfileViewStatus.VIEW)
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -153,10 +161,10 @@ fun ProfileView(
                 .fillMaxWidth()
                 .height(56.dp),
             shape = RoundedCornerShape(8.dp),
-            enabled = (status != ProfileViewStatus.VIEW)
+            enabled = (viewModel.status.value != ProfileViewStatus.VIEW)
         )
 
-        if (status != ProfileViewStatus.VIEW) {
+        if (viewModel.status.value != ProfileViewStatus.VIEW) {
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
@@ -170,7 +178,7 @@ fun ProfileView(
         Spacer(modifier = Modifier.weight(1f))
 
         // 수정 완료 버튼
-        if (status == ProfileViewStatus.EDIT) {
+        if (viewModel.status.value == ProfileViewStatus.EDIT) {
             Button(
                 onClick = {
                     // TODO: Profile Update Process
@@ -196,16 +204,4 @@ fun ProfileView(
 @Composable
 private fun ProfileViewPreviewView() {
     ProfileView()
-}
-
-@Preview
-@Composable
-private fun ProfileViewPreviewRegister() {
-    ProfileView(status = ProfileViewStatus.REGISTER)
-}
-
-@Preview
-@Composable
-private fun ProfileViewPreviewEdit() {
-    ProfileView(status = ProfileViewStatus.EDIT)
 }
