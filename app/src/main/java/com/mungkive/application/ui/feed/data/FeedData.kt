@@ -1,4 +1,4 @@
-package com.mungkive.application.ui.feed
+package com.mungkive.application.ui.feed.data
 
 data class FeedData(
     val id: String,
@@ -12,4 +12,3 @@ data class FeedData(
     val date: String,
     val content: String
 )
-

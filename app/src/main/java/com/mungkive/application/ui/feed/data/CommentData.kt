@@ -1,4 +1,4 @@
-package com.mungkive.application.ui.feed
+package com.mungkive.application.ui.feed.data
 
 data class CommentData(
     val userProfileUrl: String,
