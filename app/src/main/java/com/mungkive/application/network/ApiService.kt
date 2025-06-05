@@ -10,9 +10,11 @@ import com.mungkive.application.network.dto.ProfileEditRequest
 import com.mungkive.application.network.dto.ProfileResponse
 import com.mungkive.application.network.dto.RegisterRequest
 import com.mungkive.application.network.dto.TokenResponse
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Path
 
@@ -30,8 +32,13 @@ interface ApiService {
     suspend fun editProfile(@Body req: ProfileEditRequest): MsgResponse
 
     /* 게시글 */
+    // 게시글 작성 시 Authorization 헤더를 수동으로 추가하게 임의로 수정
+    // TODO: 헤더에 토큰 넣는거 빼기
     @POST("post")
-    suspend fun createPost(@Body req: PostCreateRequest): MsgResponse
+    suspend fun createPost(
+        @Header("Authorization") token: String,
+        @Body req: PostCreateRequest
+    ): Response<Void>
     @GET("posts")
     suspend fun listPosts(): List<PostResponse>
     @GET("posts/mypost")

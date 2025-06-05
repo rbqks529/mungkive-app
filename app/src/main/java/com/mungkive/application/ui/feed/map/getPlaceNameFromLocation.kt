@@ -1,7 +1,7 @@
-package com.mungkive.application.ui.feed.retrofit
+package com.mungkive.application.ui.feed.map
 
 import android.content.Context
-import com.mungkive.application.ui.feed.retrofit.RetrofitNaverMap.naverApi
+import com.mungkive.application.ui.feed.map.RetrofitNaverMap.naverApi
 import retrofit2.Call
 
 import android.location.Geocoder

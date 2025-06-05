@@ -1,4 +1,4 @@
-package com.mungkive.application.ui.feed.retrofit
+package com.mungkive.application.ui.feed.map
 
 data class NaverReverseGeocodeResponse(
     val results: List<Result>

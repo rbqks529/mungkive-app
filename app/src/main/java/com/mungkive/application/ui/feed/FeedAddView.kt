@@ -1,7 +1,6 @@
 package com.mungkive.application.ui.feed
 
- import android.Manifest
-import android.content.Context
+import android.Manifest
 import android.location.Location
 import android.net.Uri
 import android.os.Build
@@ -9,6 +8,7 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
+import com.mungkive.application.network.NetworkModule
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,10 +21,10 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
- import androidx.compose.foundation.rememberScrollState
- import androidx.compose.foundation.text.BasicTextField
- import androidx.compose.foundation.verticalScroll
- import androidx.compose.material3.Button
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
@@ -60,7 +60,14 @@ import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.android.gms.location.LocationServices
 import com.mungkive.application.R
-import com.mungkive.application.ui.feed.retrofit.getPlaceNameFromLocation
+import com.mungkive.application.repository.PostRepository
+import com.mungkive.application.network.dto.PostCreateRequest
+import com.mungkive.application.ui.feed.map.getPlaceNameFromLocation
+import com.mungkive.application.util.uriToBase64
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+
 
 
 @OptIn(ExperimentalPermissionsApi::class)
@@ -75,6 +82,9 @@ fun FeedAddView(
     var location by remember { mutableStateOf<String?>(null) }
     var content by remember { mutableStateOf("") }
     var locationRequesting by remember { mutableStateOf(false) }
+    var uploadRequesting by remember { mutableStateOf(false) }
+    var latLng by remember { mutableStateOf<Pair<Double, Double>?>(null) }
+
 
     // 위치 권한
     val locationPermissionState = rememberMultiplePermissionsState(
@@ -107,35 +117,12 @@ fun FeedAddView(
         galleryPermissionState.launchPermissionRequest()
     }
 
-    // 실제 위치 요청 함수
-    fun getCurrentLocation(context: Context, onResult: (String) -> Unit) {
-        val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
-        if (
-            ActivityCompat.checkSelfPermission(
-                context,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == android.content.pm.PackageManager.PERMISSION_GRANTED ||
-            ActivityCompat.checkSelfPermission(
-                context,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) == android.content.pm.PackageManager.PERMISSION_GRANTED
-        ) {
-            fusedLocationClient.lastLocation.addOnSuccessListener { loc: Location? ->
-                if (loc != null) {
-                    onResult(
-                        "(${String.format("%.4f", loc.latitude)}, ${
-                            String.format(
-                                "%.4f",
-                                loc.longitude
-                            )
-                        })"
-                    )
-                } else {
-                    onResult("위치 찾기 실패")
-                }
-            }
-        }
-    }
+
+    // 하드코딩 토큰
+    val hardCodedToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiLtjIDtlIwiLCJpc3MiOiLrqqjtlIQiLCJ1c2VySWQiOiJ0ZXN0ZXIiLCJleHAiOjE3NDkxNjEzMDJ9.ETKMuvNt9OhVX6A5_jT3df163htP91BLp7WUCr5aFYY"
+    val apiService = remember { NetworkModule.provideApiServiceWithoutInterceptor() }
+    val postRepository = remember { PostRepository(apiService, hardCodedToken) } // 하드코딩 토큰은 함수 파라미터로
+
 
     Box(
         modifier = modifier
@@ -258,16 +245,32 @@ fun FeedAddView(
                         onClick = {
                             if (locationPermissionState.allPermissionsGranted) {
                                 locationRequesting = true
-                                val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
-                                fusedLocationClient.lastLocation.addOnSuccessListener { loc: Location? ->
-                                    if (loc != null) {
-                                        getPlaceNameFromLocation(context, loc.longitude, loc.latitude) { result ->
-                                            location = result
+                                val fusedLocationClient =
+                                    LocationServices.getFusedLocationProviderClient(context)
+                                if (ActivityCompat.checkSelfPermission(
+                                        context,
+                                        Manifest.permission.ACCESS_FINE_LOCATION
+                                    ) == android.content.pm.PackageManager.PERMISSION_GRANTED ||
+                                    ActivityCompat.checkSelfPermission(
+                                        context,
+                                        Manifest.permission.ACCESS_COARSE_LOCATION
+                                    ) == android.content.pm.PackageManager.PERMISSION_GRANTED
+                                ) {
+                                    fusedLocationClient.lastLocation.addOnSuccessListener { loc: Location? ->
+                                        if (loc != null) {
+                                            latLng = loc.latitude to loc.longitude
+                                            getPlaceNameFromLocation(
+                                                context,
+                                                loc.longitude,
+                                                loc.latitude
+                                            ) { result ->
+                                                location = result
+                                                locationRequesting = false
+                                            }
+                                        } else {
+                                            location = "위치 정보 없음"
                                             locationRequesting = false
                                         }
-                                    } else {
-                                        location = "위치 정보 없음"
-                                        locationRequesting = false
                                     }
                                 }
                             } else {
@@ -346,8 +349,47 @@ fun FeedAddView(
             ) {
                 Button(
                     onClick = {
-                        Toast.makeText(context, "업로드!", Toast.LENGTH_SHORT).show()
+                        uploadRequesting = true
+                        CoroutineScope(Dispatchers.IO).launch {
+                            val base64Image = imageUri?.let { uriToBase64(context, it) } ?: ""
+                            val latitude = latLng?.first
+                            val longitude = latLng?.second
+                            val locateString = if (latitude != null && longitude != null) {
+                                "$longitude,$latitude"
+                            } else {
+                                ""
+                            }
+
+                            val request = PostCreateRequest(
+                                content = content,
+                                picture = base64Image,
+                                locate = locateString,
+                                locName = location ?: "",
+                                likes = 0
+                            )
+                            try {
+                                val result = postRepository.createPost(request)
+                                launch(Dispatchers.Main) {
+                                    uploadRequesting = false
+                                    Toast.makeText(context, "업로드 성공", Toast.LENGTH_SHORT).show()
+                                    // 피드 화면으로 이동하고 백스택 정리
+                                    navController.navigate("feed") {
+                                        popUpTo("feed") { inclusive = true }
+                                    }
+                                }
+                            } catch (e: Exception) {
+                                launch(Dispatchers.Main) {
+                                    uploadRequesting = false
+                                    Toast.makeText(
+                                        context,
+                                        "업로드 실패: ${e.message}",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            }
+                        }
                     },
+                    enabled = imageUri != null && location != null && content.isNotBlank() && !uploadRequesting,
                     modifier = Modifier
                         .fillMaxWidth()
                         .align(Alignment.BottomCenter)
@@ -357,12 +399,25 @@ fun FeedAddView(
                         containerColor = Color(0xFF3378F6)
                     )
                 ) {
-                    Text(
-                        text = "업로드",
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp
-                    )
+                    if (uploadRequesting) {
+                        CircularProgressIndicator(
+                            color = Color.White,
+                            modifier = Modifier.padding(end = 8.dp)
+                        )
+                        Text(
+                            text = "업로드 중...",
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 18.sp
+                        )
+                    } else {
+                        Text(
+                            text = "업로드",
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 18.sp
+                        )
+                    }
                 }
             }
         }
@@ -380,6 +435,7 @@ fun FeedAddView(
         }
     }
 }
+
 
 @Preview(showBackground = true, widthDp = 400, heightDp = 800)
 @Composable
