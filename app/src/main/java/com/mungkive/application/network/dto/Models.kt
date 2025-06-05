@@ -25,6 +25,7 @@ data class PostCreateRequest(
     val content: String,
     val picture: String,
     val locate: String,
+    val locName: String,
     val likes: Int = 0
 )
 
