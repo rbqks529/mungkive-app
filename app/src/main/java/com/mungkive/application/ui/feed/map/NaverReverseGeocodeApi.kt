@@ -1,4 +1,4 @@
-package com.mungkive.application.ui.feed.retrofit
+package com.mungkive.application.ui.feed.map
 
 import retrofit2.http.GET
 import retrofit2.http.Headers
