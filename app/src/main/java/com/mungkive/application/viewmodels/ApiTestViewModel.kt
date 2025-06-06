@@ -1,19 +1,15 @@
 package com.mungkive.application.viewmodels
 
 import android.util.Log
-import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mungkive.application.core.TokenManager
-import com.mungkive.application.models.profile.ProfileData
 import com.mungkive.application.network.ApiService
 import com.mungkive.application.network.dto.LoginRequest
 import com.mungkive.application.network.dto.ProfileEditRequest
-import com.mungkive.application.network.dto.ProfileResponse
 import com.mungkive.application.network.dto.RegisterRequest
 import kotlinx.coroutines.launch
 
@@ -95,9 +91,6 @@ class ApiTestViewModel(
                 profilePicture = profilePicture
             ))
             val result = rsp.message
-            if (result != null) {
-                apiResult = "Profile Edit Success: $result"
-            }
             onSuccess(true)
         } catch (e: Exception) {
             apiResult = "Profile Edit Failed: ${e.localizedMessage}"
