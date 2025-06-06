@@ -52,6 +52,30 @@ class ApiTestViewModel(
         }
     }
 
+    fun tryAutoLogin(
+        onAutoLoginFinished: (success: Boolean) -> Unit
+    ) = viewModelScope.launch {
+        val creds = tokenManager.getCredentials()
+        if (creds == null) {
+            onAutoLoginFinished(false)
+            return@launch
+        }
+
+        val (savedId, savedPw) = creds
+        try {
+            val rsp = api.login(LoginRequest(savedId, savedPw))
+            token = rsp.token
+            tokenManager.saveToken(rsp.token)
+            id = savedId
+            pw = savedPw
+            apiResult = "Auto-login success, token: $token"
+            onAutoLoginFinished(true)
+        } catch (e: Exception) {
+            apiResult = "Auto-login failed: ${e.localizedMessage}"
+            onAutoLoginFinished(false)
+        }
+    }
+
     /*fun listPosts() = viewModelScope.launch {
         try {
             val rsp = api.listPosts()
