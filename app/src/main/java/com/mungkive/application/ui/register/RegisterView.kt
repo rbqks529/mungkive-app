@@ -1,5 +1,6 @@
 package com.mungkive.application.ui.register
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,6 +24,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -42,9 +44,8 @@ fun RegisterView(
     viewModel: ApiTestViewModel,
     onRegisterSuccess: () -> Unit
 ) {
-    var idText by remember { mutableStateOf("") }
-    var passwordText1 by remember { mutableStateOf("") }
-    var passwordText2 by remember { mutableStateOf("") }
+    var passwordText by remember { mutableStateOf("") }
+    val context = LocalContext.current
 
     Column(
         modifier = modifier
@@ -81,8 +82,8 @@ fun RegisterView(
 
         // 아이디 입력
         OutlinedTextField(
-            value = idText,
-            onValueChange = { idText = it },
+            value = viewModel.id,
+            onValueChange = viewModel::onIdChange,
             label = { Text("아이디") },
             singleLine = true,
             modifier = Modifier
@@ -95,8 +96,8 @@ fun RegisterView(
 
         // 비밀번호 입력
         OutlinedTextField(
-            value = passwordText1,
-            onValueChange = { passwordText1 = it },
+            value = viewModel.pw,
+            onValueChange = viewModel::onPwChange,
             label = { Text("비밀번호") },
             singleLine = true,
             visualTransformation = PasswordVisualTransformation(),
@@ -111,8 +112,8 @@ fun RegisterView(
 
         // 비밀번호 재입력
         OutlinedTextField(
-            value = passwordText2,
-            onValueChange = { passwordText2 = it },
+            value = passwordText,
+            onValueChange = { passwordText = it },
             label = { Text("비밀번호 재입력") },
             singleLine = true,
             visualTransformation = PasswordVisualTransformation(),
@@ -126,7 +127,7 @@ fun RegisterView(
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = if (passwordText1.isNotEmpty() && passwordText1 != passwordText2) {
+            text = if (viewModel.pw.isNotEmpty() && viewModel.pw != passwordText) {
                 "비밀번호가 일치하지 않습니다"
             } else {
                 ""
@@ -145,7 +146,15 @@ fun RegisterView(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Button(
-                onClick = onRegisterSuccess,
+                onClick = {
+                    viewModel.register() { success ->
+                        if (success) {
+                            onRegisterSuccess()
+                        } else {
+                            Toast.makeText(context, "회원가입 실패", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                },
                 shape = RoundedCornerShape(50.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xFF3378F6),
@@ -154,8 +163,8 @@ fun RegisterView(
                 modifier = Modifier
                     .fillMaxWidth(0.85f)
                     .height(50.dp),
-                enabled = (idText.isNotEmpty()
-                        && passwordText1.isNotEmpty() && passwordText1 == passwordText2)
+                enabled = (viewModel.id.isNotEmpty()
+                        && viewModel.pw.isNotEmpty() && viewModel.pw == passwordText)
             ) {
                 Text(text = "가입하기", fontWeight = FontWeight.Bold, fontSize = 16.sp)
             }

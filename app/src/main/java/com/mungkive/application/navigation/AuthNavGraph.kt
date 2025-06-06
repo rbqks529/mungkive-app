@@ -47,14 +47,15 @@ fun AuthNavGraph(
             RegisterView(
                 viewModel = viewModel
             ) {
-                onLoginSuccess() // 인증 성공 처리
+                navController.navigate(Routes.AddProfile.route) // 프로필 등록으로 이동
             }
         }
         composable(Routes.AddProfile.route) {
             ProfileView(
-                /*onProfileSaved = {
-                    onLoginSuccess() // 최초 회원가입시 바로 인증 처리
-                }*/
+                viewModel = viewModel,
+                onProfileRegistered = {
+                    onLoginSuccess()
+                }
             )
         }
     }

@@ -1,14 +1,17 @@
 package com.mungkive.application.viewmodels
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mungkive.application.core.TokenManager
 import com.mungkive.application.network.ApiService
 import com.mungkive.application.network.dto.LoginRequest
+import com.mungkive.application.network.dto.RegisterRequest
 import kotlinx.coroutines.launch
 
 class ApiTestViewModel(
@@ -40,6 +43,23 @@ class ApiTestViewModel(
             onLoginSuccess()
         } catch (e: Exception) {
             apiResult = "Login Failed: ${e.localizedMessage}"
+        }
+    }
+
+    fun register(
+        onRegisterSuccess: (success: Boolean) -> Unit,
+    ) = viewModelScope.launch {
+        try {
+            val rsp = api.register(RegisterRequest(id, pw))
+            token = rsp.token
+            tokenManager.saveToken(rsp.token)
+            tokenManager.saveCredentials(id, pw)
+            Log.i("Auth", "token: $token")
+            apiResult = "Register Success"
+            onRegisterSuccess(true)
+        } catch (e: Exception) {
+            apiResult = "Register Failed: ${e.localizedMessage}"
+            onRegisterSuccess(false)
         }
     }
 
