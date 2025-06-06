@@ -1,10 +1,16 @@
 package com.mungkive.application.ui.feed
 
+import android.util.Log
+import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.mungkive.application.network.NetworkModule
+import com.mungkive.application.repository.PostRepository
 import com.mungkive.application.ui.feed.data.CommentData
 import com.mungkive.application.ui.feed.data.FeedData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
 class FeedViewModel : ViewModel() {
     // 피드 데이터
@@ -15,7 +21,12 @@ class FeedViewModel : ViewModel() {
     private val _commentsMap = MutableStateFlow<Map<String, List<CommentData>>>(emptyMap())
     val commentsMap: StateFlow<Map<String, List<CommentData>>> = _commentsMap
 
-    // 서버에서 데이터 불러오기 (repository/network 사용)
+    // 하드코딩 토큰
+    val hardCodedToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiLtjIDtlIwiLCJpc3MiOiLrqqjtlIQiLCJ1c2VySWQiOiJ0ZXN0ZXIiLCJleHAiOjE3NDkyMTQzMjV9.qwJrqMXGdOroZbnWSp86toPeF3vIQQOj2uy4RUt7aAc"
+    val apiService = NetworkModule.provideApiServiceWithoutInterceptor()
+    val postRepository = PostRepository(apiService, hardCodedToken)  // 하드코딩 토큰은 함수 파라미터로
+
+
     // TODO: 서버에서 피드 가져오기 추가
     fun fetchFeeds() {
         /*viewModelScope.launch {
@@ -48,29 +59,35 @@ class FeedViewModel : ViewModel() {
                 content = "오늘은 예쁘게 미용한 날!! 오늘은 예쁘게 미용한 날!! 오늘은 예쁘게 미용한 날!! 오늘은 예쁘게 미용한 날!! 오늘은 예쁘게 미용한 날!!"
             )
         )
+    }
 
-        // 각 피드 id별 댓글 예시 데이터
-        _commentsMap.value = mapOf(
-            "1" to listOf(
-                CommentData(
-                    userProfileUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQq4wyRh015KWJNfUC6qQz4M3qya3SqUj84rw&s",
-                    userName = "감자",
-                    content = "정말 귀엽네요!"
-                ),
-                CommentData(
-                    userProfileUrl = "https://blog.kakaocdn.net/dn/bh3xaW/btrd04olbd6/HkQMeUpJsB6D3GcVdXfrc1/img.jpg",
-                    userName = "쌀",
-                    content = "산책 좋아보여요~"
-                ),
-            ),
-            "2" to listOf(
-                CommentData(
-                    userProfileUrl = "https://blog.kakaocdn.net/dn/bh3xaW/btrd04olbd6/HkQMeUpJsB6D3GcVdXfrc1/img.jpg",
-                    userName = "이수현",
-                    content = "비숑 너무 예뻐요!"
-                ),
-            )
-        )
+    // 서버에서 댓글 불러오기
+    fun fetchComments(feedId: String) {
+        viewModelScope.launch {
+            try {
+                val postId = feedId.toLongOrNull() ?: return@launch
+                val response = postRepository.getComments(postId)
+                val commentList = response.map { res ->
+                    // userPic이 "uploads/..."면 URL로 조립
+                    val userPicUrl = if (res.userPic.startsWith("http")) {
+                        res.userPic
+                    } else {
+                        "http://34.47.102.235:8080/${res.userPic}"
+                    }
+                    CommentData(
+                        userProfileUrl = userPicUrl,
+                        userName = res.userId,
+                        content = res.content
+                    )
+                }
+                // StateFlow에 저장 (화면 자동 갱신)
+                val currentMap = _commentsMap.value.toMutableMap()
+                currentMap[feedId] = commentList
+                _commentsMap.value = currentMap
+            } catch (e: Exception) {
+                Log.d("FeedVIewModel", "Error fetching comments: ${e.message}")
+            }
+        }
     }
 
     // id로 FeedData 찾기
