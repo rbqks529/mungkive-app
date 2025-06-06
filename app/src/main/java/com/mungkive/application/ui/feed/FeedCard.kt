@@ -1,12 +1,7 @@
 package com.mungkive.application.ui.feed
 
-import android.R.attr.contentDescription
-import android.R.attr.top
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -18,7 +13,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -65,7 +59,7 @@ fun FeedCard(feed: FeedData, onClick: () -> Unit) {
             ) {
                 // 프로필 사진
                 AsyncImage(
-                    model = feed.userProfileUrl,
+                    model = feed.userPic,
                     contentDescription = null,
                     modifier = Modifier
                         .size(32.dp)
@@ -84,7 +78,7 @@ fun FeedCard(feed: FeedData, onClick: () -> Unit) {
                     modifier = Modifier.size(10.dp),
                     tint = Color.Gray
                 )
-                Text(feed.location, fontSize = 10.sp, color = Color(0xFF7B7B7B))
+                Text(feed.locName, fontSize = 10.sp, color = Color(0xFF7B7B7B))
             }
 
             AsyncImage(
@@ -163,10 +157,10 @@ fun FeedCard(feed: FeedData, onClick: () -> Unit) {
 fun FeedCardPreview() {
     val sampleFeed = FeedData(
         id = "1",
-        userProfileUrl = "https://images.unsplash.com/photo-1518717758536-85ae29035b6d?auto=format&fit=facearea&w=256&h=256",
+        userPic = "https://images.unsplash.com/photo-1518717758536-85ae29035b6d?auto=format&fit=facearea&w=256&h=256",
         userName = "보리",
         userBreed = "포메라니안",
-        location = "올림픽공원",
+        locName = "올림픽공원",
         imageUrl = "https://images.unsplash.com/photo-1518717758536-85ae29035b6d?auto=format&fit=crop&w=600&q=80",
         likeCount = 25,
         commentCount = 3,

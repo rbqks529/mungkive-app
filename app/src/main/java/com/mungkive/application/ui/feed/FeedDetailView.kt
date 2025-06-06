@@ -1,10 +1,19 @@
 package com.mungkive.application.ui.feed
 
-import android.R.attr.singleLine
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
@@ -88,7 +97,7 @@ fun FeedDetailView(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 AsyncImage(
-                    model = feed.userProfileUrl,
+                    model = feed.userPic,
                     contentDescription = null,
                     modifier = Modifier
                         .size(32.dp)
@@ -106,7 +115,7 @@ fun FeedDetailView(
                     modifier = Modifier.size(10.dp),
                     tint = Color.Gray
                 )
-                Text(feed.location, fontSize = 10.sp, color = Color(0xFF7B7B7B))
+                Text(feed.locName, fontSize = 10.sp, color = Color(0xFF7B7B7B))
             }
 
             AsyncImage(
