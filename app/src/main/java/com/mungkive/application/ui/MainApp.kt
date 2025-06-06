@@ -17,7 +17,8 @@ fun MainApp(viewModel: ApiTestViewModel) {
     AppNavHost(
         navController = navController,
         isLoggedIn = isLoggedIn,
-        onLoginSuccess = { isLoggedIn = true }
+        onLoginSuccess = { isLoggedIn = true },
+        viewModel = viewModel
     )
 }
 
