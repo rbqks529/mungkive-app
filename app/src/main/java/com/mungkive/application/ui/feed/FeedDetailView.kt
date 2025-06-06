@@ -2,33 +2,14 @@ package com.mungkive.application.ui.feed
 
 import android.R.attr.singleLine
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material3.Button
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -41,6 +22,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -55,12 +37,16 @@ fun FeedDetailView(
     modifier: Modifier = Modifier
 ) {
     val feed = viewModel.getFeedById(feedId)
-    val comments by remember { derivedStateOf { viewModel.getComments(feedId) } }
     var commentText by remember { mutableStateOf("") }
 
+    LaunchedEffect(feedId) {
+        viewModel.fetchComments(feedId)
+    }
+
+    val commentsMap by viewModel.commentsMap.collectAsStateWithLifecycle()
+    val comments = commentsMap[feedId] ?: emptyList()
 
     if (feed == null) {
-        // 피드가 없을 경우 처리
         Text(text = "피드를 찾을 수 없습니다.")
         return
     }
@@ -71,8 +57,7 @@ fun FeedDetailView(
             .fillMaxSize()
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
+            modifier = Modifier.fillMaxSize()
         ) {
             // 상단 바
             Row(
@@ -81,11 +66,7 @@ fun FeedDetailView(
                     .padding(top = 20.dp, bottom = 4.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                IconButton(onClick = {
-                    navController?.let {
-                        it.popBackStack()
-                    }
-                }) {
+                IconButton(onClick = { navController?.popBackStack() }) {
                     Icon(
                         imageVector = ImageVector.vectorResource(R.drawable.ic_back),
                         contentDescription = "뒤로 가기"
@@ -106,7 +87,6 @@ fun FeedDetailView(
                     .padding(top = 11.dp, start = 10.dp, end = 9.dp, bottom = 6.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                // 프로필 사진
                 AsyncImage(
                     model = feed.userProfileUrl,
                     contentDescription = null,
@@ -116,7 +96,6 @@ fun FeedDetailView(
                 )
                 Spacer(modifier = Modifier.width(10.dp))
 
-                // 이름, 품종, 위치
                 Column(modifier = Modifier.weight(1f)) {
                     Text(feed.userName, fontWeight = FontWeight.Bold, fontSize = 14.sp)
                     Text(feed.userBreed, fontSize = 10.sp, color = Color(0xFF7B7B7B))
@@ -143,11 +122,9 @@ fun FeedDetailView(
                 Modifier.padding(start = 10.dp, top = 9.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // TODO: 좋아요 로직
                 IconButton(
                     onClick = {},
-                    modifier = Modifier
-                        .size(22.dp)
+                    modifier = Modifier.size(22.dp)
                 ) {
                     Icon(
                         ImageVector.vectorResource(R.drawable.ic_heart),
@@ -161,12 +138,9 @@ fun FeedDetailView(
                     fontSize = 10.sp,
                     modifier = Modifier.padding(start = 2.dp, end = 12.dp)
                 )
-
-                // TODO: 댓글 로직 
                 IconButton(
                     onClick = {},
-                    modifier = Modifier
-                        .size(22.dp)
+                    modifier = Modifier.size(22.dp)
                 ) {
                     Icon(
                         ImageVector.vectorResource(R.drawable.ic_comment),
@@ -192,9 +166,7 @@ fun FeedDetailView(
                 text = feed.content,
                 fontWeight = FontWeight.W500,
                 fontSize = 13.sp,
-                modifier = Modifier.padding(start = 10.dp, bottom = 17.dp, end = 9.dp),
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis // ... 표시
+                modifier = Modifier.padding(start = 10.dp, bottom = 17.dp, end = 9.dp)
             )
 
             // 구분선
@@ -204,40 +176,47 @@ fun FeedDetailView(
                     .height(1.dp)
                     .background(Color(0xFFECECEC))
             )
-            // 댓글 리스트
-            Column(
+
+            // 댓글 리스트 - LazyColumn
+            Box(
                 Modifier
                     .weight(1f)
-                    .padding(top = 12.dp)
+                    .fillMaxWidth()
             ) {
-
-                comments.forEach { comment ->
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 4.dp, horizontal = 16.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        AsyncImage(
-                            model = comment.userProfileUrl,
-                            contentDescription = null,
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(top = 12.dp),
+                    contentPadding = PaddingValues(bottom = 16.dp)
+                ) {
+                    items(comments) { comment ->
+                        Row(
                             modifier = Modifier
-                                .size(18.dp)
-                                .clip(CircleShape)
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(
-                            comment.userName,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 12.sp,
-                            color = Color.Black
-                        )
-                        Spacer(modifier = Modifier.width(10.dp))
-                        Text(
-                            comment.content,
-                            fontSize = 12.sp,
-                            color = Color.Black
-                        )
+                                .fillMaxWidth()
+                                .padding(vertical = 8.dp, horizontal = 16.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            AsyncImage(
+                                model = comment.userProfileUrl,
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .size(28.dp)
+                                    .clip(CircleShape)
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                comment.userName,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 14.sp,
+                                color = Color.Black
+                            )
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Text(
+                                comment.content,
+                                fontSize = 13.sp,
+                                color = Color.Black
+                            )
+                        }
                     }
                 }
             }
@@ -255,20 +234,18 @@ fun FeedDetailView(
             OutlinedTextField(
                 value = commentText,
                 onValueChange = { commentText = it },
-                modifier = Modifier
-                    .weight(1f),
+                modifier = Modifier.weight(1f),
                 shape = androidx.compose.foundation.shape.RoundedCornerShape(8.dp),
                 placeholder = { Text("댓글을 입력하세요", fontSize = 12.sp) },
                 singleLine = true,
-                colors = androidx.compose.material3.OutlinedTextFieldDefaults.colors(
+                colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = Color(0xFFEBF3FF),
                     unfocusedBorderColor = Color(0xFFBDBDBD)
                 )
             )
             Spacer(modifier = Modifier.width(8.dp))
             Button(
-                // TODO: 댓글 작성 함수 추가
-                onClick = {},   // 여기에 댓글 등록 로직 함수 작성하시면 됩니다
+                onClick = {},   // 댓글 등록 함수 작성 필요
                 enabled = commentText.isNotBlank(),
                 shape = androidx.compose.foundation.shape.RoundedCornerShape(6.dp),
                 modifier = Modifier.height(50.dp)
@@ -279,9 +256,7 @@ fun FeedDetailView(
     }
 }
 
-
 fun getPreviewFeedViewModel(): FeedViewModel {
-    // Preview에서 ViewModel을 생성하고, 더미 데이터 채우기
     val viewModel = FeedViewModel()
     viewModel.fetchFeeds()
     return viewModel
@@ -292,8 +267,6 @@ fun getPreviewFeedViewModel(): FeedViewModel {
 fun FeedDetailViewPreview() {
     val navController = rememberNavController()
     val viewModel = remember { getPreviewFeedViewModel() }
-
-    // FeedId "1" 또는 "2" 등 fetchFeeds에서 사용한 값 사용
     FeedDetailView(
         feedId = "1",
         viewModel = viewModel,
