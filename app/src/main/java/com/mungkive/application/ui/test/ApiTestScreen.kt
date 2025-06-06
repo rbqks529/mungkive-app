@@ -70,7 +70,7 @@ fun ApiTestScreen(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Button(onClick = viewModel::getProfile) { Text("Get Profile") }
-            Button(onClick = viewModel::listPosts) { Text("Get Post List") }
+            /*Button(onClick = viewModel::listPosts) { Text("Get Post List") }*/
         }
 
         /* API Response */

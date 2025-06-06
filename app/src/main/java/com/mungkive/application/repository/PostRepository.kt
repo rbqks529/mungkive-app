@@ -3,6 +3,7 @@ package com.mungkive.application.repository
 import com.mungkive.application.network.ApiService
 import com.mungkive.application.network.dto.CommentResponse
 import com.mungkive.application.network.dto.PostCreateRequest
+import com.mungkive.application.network.dto.PostResponse
 import retrofit2.Response
 
 class PostRepository(
@@ -17,5 +18,9 @@ class PostRepository(
 
     suspend fun getComments(postId: Long): List<CommentResponse> {
         return apiService.getComments("Bearer $token", postId)
+    }
+
+    suspend fun getFeeds(): List<PostResponse> {
+        return apiService.listPosts("Bearer $token")
     }
 }

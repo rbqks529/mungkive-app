@@ -119,7 +119,7 @@ fun FeedDetailView(
             }
 
             AsyncImage(
-                model = feed.imageUrl,
+                model = feed.picture,
                 contentDescription = null,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -143,7 +143,7 @@ fun FeedDetailView(
                     )
                 }
                 Text(
-                    text = "${feed.likeCount}",
+                    text = "${feed.likes}",
                     fontSize = 10.sp,
                     modifier = Modifier.padding(start = 2.dp, end = 12.dp)
                 )

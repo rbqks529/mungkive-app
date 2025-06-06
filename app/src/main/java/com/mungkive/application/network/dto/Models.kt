@@ -30,13 +30,17 @@ data class PostCreateRequest(
 )
 
 data class PostResponse(
-    val id: Long,
-    val userId: String,
-    val userName: String,
+    val id: String,
+    val userPic: String, //유저 프로필 이미지
+    val userName: String,   // 유저 이름
+    val userBreed: String,  // 유저 품종
     val content: String,
+    val locate: String = "", // 게시물 위치 (좌표)
+    val locName: String,   // 게시물 위치
     val picture: String,
-    val locate: String,
-    val likes: Int
+    val likes: Int,
+    val commentCount: Int,
+    val date: String,
 )
 
 // dto/CommentDto.kt
@@ -44,7 +48,7 @@ data class CommentCreateRequest(val content: String)
 data class CommentResponse(
     val id: Long,
     val postId: Long,       // 추가
-    val userId: String,     // 추가 (닉네임 또는 id)
+    val userName: String,     // 추가 (닉네임 또는 id)
     val userPic: String,    // 추가 (프로필 사진 경로)
     val content: String,
     val created: String     // 추가 (작성 시간)

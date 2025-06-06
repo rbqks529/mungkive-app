@@ -82,7 +82,7 @@ fun FeedCard(feed: FeedData, onClick: () -> Unit) {
             }
 
             AsyncImage(
-                model = feed.imageUrl,
+                model = feed.picture,
                 contentDescription = null,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -109,7 +109,7 @@ fun FeedCard(feed: FeedData, onClick: () -> Unit) {
                     )
                 }
                 Text(
-                    text = "${feed.likeCount}",
+                    text = "${feed.likes}",
                     fontSize = 10.sp,
                     modifier = Modifier.padding(start = 2.dp, end = 12.dp)
                 )
@@ -161,8 +161,8 @@ fun FeedCardPreview() {
         userName = "보리",
         userBreed = "포메라니안",
         locName = "올림픽공원",
-        imageUrl = "https://images.unsplash.com/photo-1518717758536-85ae29035b6d?auto=format&fit=crop&w=600&q=80",
-        likeCount = 25,
+        picture = "https://images.unsplash.com/photo-1518717758536-85ae29035b6d?auto=format&fit=crop&w=600&q=80",
+        likes = 25,
         commentCount = 3,
         date = "2025. 5. 15. 14:32",
         content = "오늘 즐거운 산책~"

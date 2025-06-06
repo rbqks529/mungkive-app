@@ -43,10 +43,13 @@ interface ApiService {
     ): Response<Void>
 
     @GET("posts")
-    suspend fun listPosts(): List<PostResponse>
+    suspend fun listPosts(
+        @Header("Authorization") token: String,
+    ): List<PostResponse>
 
     @GET("posts/mypost")
-    suspend fun myPosts(): List<PostResponse>
+    suspend fun myPosts(
+    ): List<PostResponse>
 
     @DELETE("post/{id}")
     suspend fun deletePost(@Path("id") id: Long): MsgResponse
