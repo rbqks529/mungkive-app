@@ -1,7 +1,6 @@
 package com.mungkive.application.ui.feed
 
 import android.util.Log
-import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mungkive.application.network.NetworkModule
@@ -76,7 +75,7 @@ class FeedViewModel : ViewModel() {
                     }
                     CommentData(
                         userProfileUrl = userPicUrl,
-                        userName = res.userId,
+                        userName = res.userName,
                         content = res.content
                     )
                 }
