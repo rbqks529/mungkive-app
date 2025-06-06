@@ -1,5 +1,6 @@
 package com.mungkive.application.viewmodels
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -26,13 +27,17 @@ class ApiTestViewModel(
     fun onIdChange(newId: String) = run { id = newId }
     fun onPwChange(newPw: String) = run { pw = newPw }
 
-    fun login() = viewModelScope.launch {
+    fun login(
+        onLoginSuccess: () -> Unit
+    ) = viewModelScope.launch {
         try {
             val rsp = api.login(LoginRequest(id, pw))
             token = rsp.token
             tokenManager.saveToken(rsp.token)
             tokenManager.saveCredentials(id, pw)
+            Log.i("Auth", "token: $token")
             apiResult = "Login Success"
+            onLoginSuccess()
         } catch (e: Exception) {
             apiResult = "Login Failed: ${e.localizedMessage}"
         }

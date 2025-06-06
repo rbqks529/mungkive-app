@@ -41,11 +41,9 @@ import com.mungkive.application.viewmodels.ApiTestViewModel
 fun LoginView(
     modifier: Modifier = Modifier,
     viewModel: ApiTestViewModel,
-    onLoginSuccess: () -> Unit
+    onLoginSuccess: () -> Unit,
+    onRegisterClick: () -> Unit
 ) {
-    var idText by remember { mutableStateOf("") }
-    var passwordText by remember { mutableStateOf("") }
-
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -81,8 +79,8 @@ fun LoginView(
 
         // 아이디 입력
         OutlinedTextField(
-            value = idText,
-            onValueChange = { idText = it },
+            value = viewModel.id,
+            onValueChange = viewModel::onIdChange,
             label = { Text("아이디") },
             singleLine = true,
             modifier = Modifier
@@ -95,8 +93,8 @@ fun LoginView(
 
         // 비밀번호 입력
         OutlinedTextField(
-            value = passwordText,
-            onValueChange = { passwordText = it },
+            value = viewModel.pw,
+            onValueChange = viewModel::onPwChange,
             label = { Text("비밀번호") },
             singleLine = true,
             visualTransformation = PasswordVisualTransformation(),
@@ -116,7 +114,9 @@ fun LoginView(
         ) {
             Button(
                 onClick = {
-                    // TODO: Login Process
+                    viewModel.login {
+                        onLoginSuccess()
+                    }
                 },
                 shape = RoundedCornerShape(50.dp),
                 colors = ButtonDefaults.buttonColors(
@@ -132,7 +132,7 @@ fun LoginView(
 
             Button(
                 onClick = {
-                    // TODO: Register Process
+                    onRegisterClick()
                 },
                 shape = RoundedCornerShape(50.dp),
                 colors = ButtonDefaults.buttonColors(

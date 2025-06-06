@@ -35,6 +35,12 @@ fun AuthNavGraph(
         composable(Routes.Login.route) {
             LoginView(
                 viewModel = viewModel,
+                onLoginSuccess = {
+                    onLoginSuccess() // 인증 성공 처리
+                },
+                onRegisterClick = {
+                    navController.navigate(Routes.Register.route)
+                }
             )
         }
         composable(Routes.Register.route) {
