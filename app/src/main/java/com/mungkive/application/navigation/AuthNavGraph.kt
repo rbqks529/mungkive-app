@@ -1,6 +1,5 @@
 package com.mungkive.application.navigation
 
-import ProfileView
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -8,9 +7,9 @@ import androidx.navigation.compose.composable
 import com.mungkive.application.models.Routes
 import com.mungkive.application.ui.login.LoginView
 import com.mungkive.application.ui.login.WelcomeView
+import com.mungkive.application.ui.profile.AddProfileView
 import com.mungkive.application.ui.register.RegisterView
 import com.mungkive.application.viewmodels.ApiTestViewModel
-
 
 @Composable
 fun AuthNavGraph(
@@ -47,15 +46,15 @@ fun AuthNavGraph(
             RegisterView(
                 viewModel = viewModel
             ) {
-                onLoginSuccess() // 인증 성공 처리
+                navController.navigate(Routes.AddProfile.route) // 프로필 등록으로 이동
             }
         }
         composable(Routes.AddProfile.route) {
-            ProfileView(
-                /*onProfileSaved = {
-                    onLoginSuccess() // 최초 회원가입시 바로 인증 처리
-                }*/
-            )
+            AddProfileView(
+                viewModel = viewModel
+            ) {
+                onLoginSuccess() // 인증 성공 처리
+            }
         }
     }
 }

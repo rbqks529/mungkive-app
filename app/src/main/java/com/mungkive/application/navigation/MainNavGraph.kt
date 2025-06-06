@@ -75,8 +75,12 @@ fun MainNavGraph(
         }
 
         composable(Routes.Tip.route) { TipListView() }
-        composable(Routes.Profile.route) { ProfileView() }
-        composable(Routes.FeedWrite.route) { FeedAddView(navController, postRepository) }
+        composable(Routes.Profile.route) {
+            ProfileView(
+                viewModel = viewModel
+            )
+        }
+        composable(Routes.FeedWrite.route) { FeedAddView(navController) }
 
         // 상세 페이지
         composable(Routes.DetailFeed.route + "/{feedId}") { backStackEntry ->
