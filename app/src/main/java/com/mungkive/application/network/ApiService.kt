@@ -22,12 +22,14 @@ interface ApiService {
     /* 인증 */
     @POST("register")
     suspend fun register(@Body req: RegisterRequest): TokenResponse
+
     @POST("login")
     suspend fun login(@Body req: LoginRequest): TokenResponse
 
     /* 프로필 */
     @GET("profile")
     suspend fun getProfile(): ProfileResponse
+
     @POST("profile/edit")
     suspend fun editProfile(@Body req: ProfileEditRequest): MsgResponse
 
@@ -39,10 +41,13 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Body req: PostCreateRequest
     ): Response<Void>
+
     @GET("posts")
     suspend fun listPosts(): List<PostResponse>
+
     @GET("posts/mypost")
     suspend fun myPosts(): List<PostResponse>
+
     @DELETE("post/{id}")
     suspend fun deletePost(@Path("id") id: Long): MsgResponse
 
@@ -54,10 +59,14 @@ interface ApiService {
     ): MsgResponse
 
     @GET("post/{id}/comments")
-    suspend fun getComments(@Path("id") postId: Long): List<CommentResponse>
+    suspend fun getComments(
+        @Header("Authorization") token: String,
+        @Path("id") postId: Long
+    ): List<CommentResponse>
 
     @POST("post/{id}/like")
     suspend fun likePost(@Path("id") postId: Long): MsgResponse
+
     @POST("post/{id}/unlike")
     suspend fun unlikePost(@Path("id") postId: Long): MsgResponse
 }

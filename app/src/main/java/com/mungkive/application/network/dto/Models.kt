@@ -43,9 +43,13 @@ data class PostResponse(
 data class CommentCreateRequest(val content: String)
 data class CommentResponse(
     val id: Long,
-    val userId: String,
-    val content: String
+    val postId: Long,       // 추가
+    val userId: String,     // 추가 (닉네임 또는 id)
+    val userPic: String,    // 추가 (프로필 사진 경로)
+    val content: String,
+    val created: String     // 추가 (작성 시간)
 )
+
 
 // dto/Common.kt
 data class MsgResponse(val message: String? = null)

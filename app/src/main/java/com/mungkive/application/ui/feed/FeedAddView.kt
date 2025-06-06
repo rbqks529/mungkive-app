@@ -119,7 +119,7 @@ fun FeedAddView(
 
 
     // 하드코딩 토큰
-    val hardCodedToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiLtjIDtlIwiLCJpc3MiOiLrqqjtlIQiLCJ1c2VySWQiOiJ0ZXN0ZXIiLCJleHAiOjE3NDkxNjEzMDJ9.ETKMuvNt9OhVX6A5_jT3df163htP91BLp7WUCr5aFYY"
+    val hardCodedToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiLtjIDtlIwiLCJpc3MiOiLrqqjtlIQiLCJ1c2VySWQiOiJ0ZXN0ZXIiLCJleHAiOjE3NDkyMTQzMjV9.qwJrqMXGdOroZbnWSp86toPeF3vIQQOj2uy4RUt7aAc"
     val apiService = remember { NetworkModule.provideApiServiceWithoutInterceptor() }
     val postRepository = remember { PostRepository(apiService, hardCodedToken) } // 하드코딩 토큰은 함수 파라미터로
 
