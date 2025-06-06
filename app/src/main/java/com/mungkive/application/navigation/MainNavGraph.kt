@@ -18,11 +18,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import com.mungkive.application.ui.tip.TipListView
+import com.mungkive.application.viewmodels.ApiTestViewModel
 
 @Composable
 fun MainNavGraph(
     navController: NavHostController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: ApiTestViewModel
 ) {
     NavHost(
         navController = navController,
