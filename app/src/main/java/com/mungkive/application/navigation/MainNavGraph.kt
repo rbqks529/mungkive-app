@@ -64,8 +64,7 @@ fun MainNavGraph(
         composable(Routes.Tip.route) { TipListView() }
         composable(Routes.Profile.route) {
             ProfileView(
-                viewModel = viewModel,
-                onProfileRegistered = { }
+                viewModel = viewModel
             )
         }
         composable(Routes.FeedWrite.route) { FeedAddView(navController) }

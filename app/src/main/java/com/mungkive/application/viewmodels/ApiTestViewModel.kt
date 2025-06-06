@@ -1,16 +1,15 @@
 package com.mungkive.application.viewmodels
 
 import android.util.Log
-import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mungkive.application.core.TokenManager
 import com.mungkive.application.network.ApiService
 import com.mungkive.application.network.dto.LoginRequest
+import com.mungkive.application.network.dto.ProfileEditRequest
 import com.mungkive.application.network.dto.RegisterRequest
 import kotlinx.coroutines.launch
 
@@ -29,6 +28,20 @@ class ApiTestViewModel(
 
     fun onIdChange(newId: String) = run { id = newId }
     fun onPwChange(newPw: String) = run { pw = newPw }
+
+    // Profile
+    var name by mutableStateOf("")
+        private set
+    var breed by mutableStateOf("")
+        private set
+    var age by mutableStateOf("")
+        private set
+    var profilePicture by mutableStateOf("")
+        private set
+
+    fun onNameChange(newName: String) = run { name = newName }
+    fun onBreedChange(newBreed: String) = run { breed = newBreed }
+    fun onAgeChange(newAge: String) = run { age = newAge }
 
     fun login(
         onLoginSuccess: () -> Unit
@@ -63,10 +76,36 @@ class ApiTestViewModel(
         }
     }
 
+    fun editProfile(
+        onSuccess: (success: Boolean) -> Unit,
+    ) = viewModelScope.launch {
+        try {
+            val rsp = api.editProfile(ProfileEditRequest(
+                name = name,
+                breed = breed,
+                age = if (age.toIntOrNull() != null) {
+                    age.toInt()
+                } else {
+                    0
+                },
+                profilePicture = profilePicture
+            ))
+            val result = rsp.message
+            onSuccess(true)
+        } catch (e: Exception) {
+            apiResult = "Profile Edit Failed: ${e.localizedMessage}"
+            onSuccess(false)
+        }
+    }
+
     fun getProfile() = viewModelScope.launch {
         try {
             val rsp = api.getProfile()
-            apiResult = rsp.toString()
+            apiResult = "Profile Get Success"
+            name = rsp.name
+            breed = rsp.breed
+            age = rsp.age.toString()
+            profilePicture = rsp.profilePicture
         } catch (e: Exception) {
             apiResult = "Profile Failed: ${e.localizedMessage}"
         }
