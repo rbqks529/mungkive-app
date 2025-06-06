@@ -1,10 +1,8 @@
 package com.mungkive.application.ui.feed
 
 import android.util.Log
-import android.util.Log.e
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mungkive.application.network.NetworkModule
 import com.mungkive.application.repository.PostRepository
 import com.mungkive.application.ui.feed.data.CommentData
 import com.mungkive.application.ui.feed.data.FeedData
@@ -12,7 +10,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class FeedViewModel : ViewModel() {
+class FeedViewModel(
+    private val postRepository: PostRepository
+) : ViewModel() {
     // 피드 데이터
     private val _feedList = MutableStateFlow<List<FeedData>>(emptyList())
     val feedList: StateFlow<List<FeedData>> = _feedList
@@ -28,12 +28,6 @@ class FeedViewModel : ViewModel() {
     // 새로고침 상태 추가
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing: StateFlow<Boolean> = _isRefreshing
-
-    // 하드 코딩 토큰
-    val hardCodedToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiLtjIDtlIwiLCJpc3MiOiLrqqjtlIQiLCJ1c2VySWQiOiJ0ZXN0ZXIiLCJleHAiOjE3NDkyMTQzMjV9.qwJrqMXGdOroZbnWSp86toPeF3vIQQOj2uy4RUt7aAc"
-    val apiService = NetworkModule.provideApiServiceWithoutInterceptor()
-    val postRepository = PostRepository(apiService, hardCodedToken)  // 하드코딩 토큰은 함수 파라미터로
-
 
     fun fetchFeeds() {
         viewModelScope.launch {
