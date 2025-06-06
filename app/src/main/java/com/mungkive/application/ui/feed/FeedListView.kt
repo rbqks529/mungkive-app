@@ -24,7 +24,6 @@ import com.mungkive.application.ui.feed.FeedViewModel
 @Composable
 fun FeedListView(
     viewModel: FeedViewModel = viewModel(),
-    onWriteClick: () -> Unit,
     onFeedClick: (FeedData) -> Unit
 ) {
     val feedList by viewModel.feedList.collectAsState()
@@ -35,7 +34,6 @@ fun FeedListView(
     }
 
     if (feedList.isEmpty()) {
-        // 1. 로딩 인디케이터 및 메시지
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -47,7 +45,6 @@ fun FeedListView(
             }
         }
     } else {
-        // 2. 피드 리스트 UI
         LazyColumn(
             modifier = Modifier
                 .background(Color.White)
@@ -75,5 +72,5 @@ fun FeedListView(
 @Preview(showBackground = true, widthDp = 360, heightDp = 800)
 @Composable
 fun FeedListViewPreview() {
-    FeedListView(onFeedClick = {}, onWriteClick = {})
+    FeedListView(onFeedClick = {})
 }

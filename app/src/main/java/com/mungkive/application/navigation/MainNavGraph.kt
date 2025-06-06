@@ -55,8 +55,7 @@ fun MainNavGraph(
                 viewModel = viewModel,
                 onFeedClick = { feed ->
                     navController.navigate("${Routes.DetailFeed.route}/${feed.id}")
-                },
-                onWriteClick = {}
+                }
             )
         }
 
