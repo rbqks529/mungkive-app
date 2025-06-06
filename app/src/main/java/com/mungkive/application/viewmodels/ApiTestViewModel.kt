@@ -47,12 +47,12 @@ class ApiTestViewModel(
         }
     }
 
-    fun listPosts() = viewModelScope.launch {
+    /*fun listPosts() = viewModelScope.launch {
         try {
             val rsp = api.listPosts()
             apiResult = rsp.joinToString("\n")
         } catch (e: Exception) {
             apiResult = "Post Failed: ${e.localizedMessage}"
         }
-    }
+    }*/
 }

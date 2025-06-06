@@ -8,8 +8,8 @@ data class FeedData(
     val content: String,
     val locate: String = "", // 게시물 위치 (좌표)
     val locName: String,   // 게시물 위치
-    val imageUrl: String,
-    val likeCount: Int,
+    val picture: String,
+    val likes: Int,
     val commentCount: Int,
     val date: String,
 )
