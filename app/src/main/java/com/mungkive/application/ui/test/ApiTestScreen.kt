@@ -50,7 +50,7 @@ fun ApiTestScreen(
 
         /* Login */
         Button(
-            onClick = viewModel::login,
+            onClick = viewModel.login(onLoginSuccess = { }) as () -> Unit,
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Login")

@@ -1,5 +1,6 @@
 package com.mungkive.application.viewmodels
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -26,13 +27,17 @@ class ApiTestViewModel(
     fun onIdChange(newId: String) = run { id = newId }
     fun onPwChange(newPw: String) = run { pw = newPw }
 
-    fun login() = viewModelScope.launch {
+    fun login(
+        onLoginSuccess: () -> Unit
+    ) = viewModelScope.launch {
         try {
             val rsp = api.login(LoginRequest(id, pw))
             token = rsp.token
             tokenManager.saveToken(rsp.token)
             tokenManager.saveCredentials(id, pw)
+            Log.i("Auth", "token: $token")
             apiResult = "Login Success"
+            onLoginSuccess()
         } catch (e: Exception) {
             apiResult = "Login Failed: ${e.localizedMessage}"
         }
@@ -44,6 +49,30 @@ class ApiTestViewModel(
             apiResult = rsp.toString()
         } catch (e: Exception) {
             apiResult = "Profile Failed: ${e.localizedMessage}"
+        }
+    }
+
+    fun tryAutoLogin(
+        onAutoLoginFinished: (success: Boolean) -> Unit
+    ) = viewModelScope.launch {
+        val creds = tokenManager.getCredentials()
+        if (creds == null) {
+            onAutoLoginFinished(false)
+            return@launch
+        }
+
+        val (savedId, savedPw) = creds
+        try {
+            val rsp = api.login(LoginRequest(savedId, savedPw))
+            token = rsp.token
+            tokenManager.saveToken(rsp.token)
+            id = savedId
+            pw = savedPw
+            apiResult = "Auto-login success, token: $token"
+            onAutoLoginFinished(true)
+        } catch (e: Exception) {
+            apiResult = "Auto-login failed: ${e.localizedMessage}"
+            onAutoLoginFinished(false)
         }
     }
 
