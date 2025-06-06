@@ -150,9 +150,3 @@ fun LoginView(
         Spacer(modifier = Modifier.height(20.dp))
     }
 }
-
-@Preview
-@Composable
-private fun LoginViewPreview() {
-    LoginView()
-}
