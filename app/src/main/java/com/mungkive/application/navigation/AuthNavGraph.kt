@@ -24,10 +24,13 @@ fun AuthNavGraph(
     ) {
         composable(Routes.Welcome.route) {
             WelcomeView(
-                viewModel = viewModel
-            ) {
-                // navController.navigate(Routes.Login.route)
-            }
+                onLoginClick = {
+                    navController.navigate(Routes.Login.route)
+                },
+                onRegisterClick = {
+                    navController.navigate(Routes.Register.route)
+                }
+            )
         }
         composable(Routes.Login.route) {
             LoginView(

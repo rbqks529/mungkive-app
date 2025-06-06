@@ -30,8 +30,8 @@ import com.mungkive.application.viewmodels.ApiTestViewModel
 @Composable
 fun WelcomeView(
     modifier: Modifier = Modifier,
-    viewModel: ApiTestViewModel,
     onLoginClick: () -> Unit,
+    onRegisterClick: () -> Unit
 ) {
     Column(
         modifier = modifier.fillMaxSize(),
@@ -68,7 +68,7 @@ fun WelcomeView(
         // 로그인 버튼
         Button(
             onClick = {
-                // TODO: Login Process
+                onLoginClick()
             },
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFF3378F6), // 파란색
@@ -91,7 +91,7 @@ fun WelcomeView(
         // 회원 가입 버튼
         Button(
             onClick = {
-                // TODO: Register Process
+                onRegisterClick()
             },
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFF8A8A8E), // 회색
