@@ -12,7 +12,7 @@ import com.mungkive.application.viewmodels.ApiTestViewModel
 @Composable
 fun MainApp(viewModel: ApiTestViewModel) {
     val navController = rememberNavController()
-    var isLoggedIn by rememberSaveable { mutableStateOf(true) } //일단 로그인 성공 화면을 표시
+    var isLoggedIn by rememberSaveable { mutableStateOf(false) } //일단 로그인 성공 화면을 표시
 
     AppNavHost(
         navController = navController,
