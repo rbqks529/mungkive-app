@@ -5,6 +5,7 @@ sealed class Routes(val route: String, val isRoot: Boolean = true) {
     //Auth 경로
     object Welcome : Routes("Welcome")
     object Login : Routes("Login")
+    object Register: Routes("Register")
     object AddProfile : Routes("AddProfile")
 
     //Main 경로
@@ -23,6 +24,7 @@ sealed class Routes(val route: String, val isRoot: Boolean = true) {
                 //Auth
                 Welcome.route -> Welcome
                 Login.route -> Login
+                Register.route -> Register
                 //Main
                 Map.route -> Map
                 Feed.route -> Feed

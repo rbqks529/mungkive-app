@@ -8,13 +8,15 @@ import androidx.navigation.compose.composable
 import com.mungkive.application.models.Routes
 import com.mungkive.application.ui.login.LoginView
 import com.mungkive.application.ui.login.WelcomeView
-import ProfileView
+import com.mungkive.application.ui.register.RegisterView
+import com.mungkive.application.viewmodels.ApiTestViewModel
 
 
 @Composable
 fun AuthNavGraph(
     navController: NavHostController,
-    onLoginSuccess: () -> Unit
+    onLoginSuccess: () -> Unit,
+    viewModel: ApiTestViewModel
 ) {
     NavHost(
         navController = navController,
@@ -22,15 +24,31 @@ fun AuthNavGraph(
     ) {
         composable(Routes.Welcome.route) {
             WelcomeView(
-                /*onLoginClick = { navController.navigate(Routes.Login.route) }*/
+                onLoginClick = {
+                    navController.navigate(Routes.Login.route)
+                },
+                onRegisterClick = {
+                    navController.navigate(Routes.Register.route)
+                }
             )
         }
         composable(Routes.Login.route) {
             LoginView(
-                /*onLoginSuccess = {
+                viewModel = viewModel,
+                onLoginSuccess = {
                     onLoginSuccess() // 인증 성공 처리
-                }*/
+                },
+                onRegisterClick = {
+                    navController.navigate(Routes.Register.route)
+                }
             )
+        }
+        composable(Routes.Register.route) {
+            RegisterView(
+                viewModel = viewModel
+            ) {
+                onLoginSuccess() // 인증 성공 처리
+            }
         }
         composable(Routes.AddProfile.route) {
             ProfileView(

@@ -31,13 +31,17 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mungkive.application.R
+import com.mungkive.application.viewmodels.ApiTestViewModel
 
 @Composable
-fun RegisterView(modifier: Modifier = Modifier) {
+fun RegisterView(
+    modifier: Modifier = Modifier,
+    viewModel: ApiTestViewModel,
+    onRegisterSuccess: () -> Unit
+) {
     var idText by remember { mutableStateOf("") }
     var passwordText1 by remember { mutableStateOf("") }
     var passwordText2 by remember { mutableStateOf("") }
@@ -141,9 +145,7 @@ fun RegisterView(modifier: Modifier = Modifier) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Button(
-                onClick = {
-                    // TODO: Register Process, Transition to Profile Registration
-                },
+                onClick = onRegisterSuccess,
                 shape = RoundedCornerShape(50.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xFF3378F6),
@@ -161,10 +163,4 @@ fun RegisterView(modifier: Modifier = Modifier) {
 
         Spacer(modifier = Modifier.height(20.dp))
     }
-}
-
-@Preview
-@Composable
-private fun RegisterViewPreview() {
-    RegisterView()
 }
