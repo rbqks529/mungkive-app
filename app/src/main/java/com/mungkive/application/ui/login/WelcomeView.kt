@@ -22,13 +22,17 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mungkive.application.R
+import com.mungkive.application.viewmodels.ApiTestViewModel
 
 @Composable
-fun WelcomeView(modifier: Modifier = Modifier) {
+fun WelcomeView(
+    modifier: Modifier = Modifier,
+    viewModel: ApiTestViewModel,
+    onLoginClick: () -> Unit,
+) {
     Column(
         modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -107,10 +111,4 @@ fun WelcomeView(modifier: Modifier = Modifier) {
 
         Spacer(modifier = Modifier.height(20.dp))
     }
-}
-
-@Preview
-@Composable
-private fun WelcomeViewPreview() {
-    WelcomeView()
 }

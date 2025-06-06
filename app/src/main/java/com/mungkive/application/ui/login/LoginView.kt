@@ -35,10 +35,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mungkive.application.R
+import com.mungkive.application.viewmodels.ApiTestViewModel
 
 @Composable
 fun LoginView(
     modifier: Modifier = Modifier,
+    viewModel: ApiTestViewModel,
+    onLoginSuccess: () -> Unit
 ) {
     var idText by remember { mutableStateOf("") }
     var passwordText by remember { mutableStateOf("") }
