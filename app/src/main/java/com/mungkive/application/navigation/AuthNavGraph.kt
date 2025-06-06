@@ -8,13 +8,14 @@ import androidx.navigation.compose.composable
 import com.mungkive.application.models.Routes
 import com.mungkive.application.ui.login.LoginView
 import com.mungkive.application.ui.login.WelcomeView
-import ProfileView
+import com.mungkive.application.viewmodels.ApiTestViewModel
 
 
 @Composable
 fun AuthNavGraph(
     navController: NavHostController,
-    onLoginSuccess: () -> Unit
+    onLoginSuccess: () -> Unit,
+    viewModel: ApiTestViewModel
 ) {
     NavHost(
         navController = navController,

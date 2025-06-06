@@ -16,12 +16,14 @@ fun AppNavHost(
         // 인증 전 화면
         AuthNavGraph(
             navController = navController,
-            onLoginSuccess = onLoginSuccess
+            onLoginSuccess = onLoginSuccess,
+            viewModel = viewModel
         )
     } else {
         // 인증 후 화면
         MainScaffold(
-            navController = navController
+            navController = navController,
+            viewModel = viewModel
         )
     }
 }
