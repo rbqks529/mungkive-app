@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import com.mungkive.application.models.Routes
 import com.mungkive.application.ui.login.LoginView
 import com.mungkive.application.ui.login.WelcomeView
+import com.mungkive.application.ui.register.RegisterView
 import com.mungkive.application.viewmodels.ApiTestViewModel
 
 
@@ -30,6 +31,11 @@ fun AuthNavGraph(
         }
         composable(Routes.Login.route) {
             LoginView(
+                viewModel = viewModel,
+            )
+        }
+        composable(Routes.Register.route) {
+            RegisterView(
                 viewModel = viewModel
             ) {
                 onLoginSuccess() // 인증 성공 처리
