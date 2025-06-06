@@ -46,7 +46,7 @@ fun MapView(
 //        )
     ) {
         markerFeedList.forEach { marker ->
-            val urlImg = marker.feed?.imageUrl
+            val urlImg = marker.feed?.picture
             if (urlImg != null) {
                 MarkerWithUrlIcon(
                     position = marker.position,
