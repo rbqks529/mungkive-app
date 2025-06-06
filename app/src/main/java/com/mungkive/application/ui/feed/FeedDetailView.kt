@@ -1,13 +1,10 @@
 package com.mungkive.application.ui.feed
 
-import android.R.attr.singleLine
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -108,7 +105,7 @@ fun FeedDetailView(
             ) {
                 // 프로필 사진
                 AsyncImage(
-                    model = feed.userProfileUrl,
+                    model = feed.userPic,
                     contentDescription = null,
                     modifier = Modifier
                         .size(32.dp)
@@ -127,7 +124,7 @@ fun FeedDetailView(
                     modifier = Modifier.size(10.dp),
                     tint = Color.Gray
                 )
-                Text(feed.location, fontSize = 10.sp, color = Color(0xFF7B7B7B))
+                Text(feed.locName, fontSize = 10.sp, color = Color(0xFF7B7B7B))
             }
 
             AsyncImage(
