@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -17,6 +18,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -44,6 +46,10 @@ fun RegisterView(
     viewModel: ApiTestViewModel,
     onRegisterSuccess: () -> Unit
 ) {
+    LaunchedEffect(Unit) {
+        viewModel::clearIdAndPw
+    }
+
     var passwordText by remember { mutableStateOf("") }
     val context = LocalContext.current
 
@@ -88,7 +94,7 @@ fun RegisterView(
             singleLine = true,
             modifier = Modifier
                 .fillMaxWidth(0.85f)
-                .height(56.dp),
+                .defaultMinSize(minHeight = 56.dp),
             shape = RoundedCornerShape(8.dp)
         )
 
@@ -104,7 +110,7 @@ fun RegisterView(
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             modifier = Modifier
                 .fillMaxWidth(0.85f)
-                .height(56.dp),
+                .defaultMinSize(minHeight = 56.dp),
             shape = RoundedCornerShape(8.dp)
         )
 
@@ -120,7 +126,7 @@ fun RegisterView(
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             modifier = Modifier
                 .fillMaxWidth(0.85f)
-                .height(56.dp),
+                .defaultMinSize(minHeight = 56.dp),
             shape = RoundedCornerShape(8.dp)
         )
 

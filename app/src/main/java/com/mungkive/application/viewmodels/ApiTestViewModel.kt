@@ -29,6 +29,11 @@ class ApiTestViewModel(
     fun onIdChange(newId: String) = run { id = newId }
     fun onPwChange(newPw: String) = run { pw = newPw }
 
+    fun clearIdAndPw() {
+        id = ""
+        pw = ""
+    }
+
     // Profile
     var name by mutableStateOf("")
         private set
