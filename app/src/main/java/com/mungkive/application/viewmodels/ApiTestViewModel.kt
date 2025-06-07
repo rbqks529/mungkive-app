@@ -42,11 +42,14 @@ class ApiTestViewModel(
     var age by mutableStateOf("")
         private set
     var profilePicture by mutableStateOf("")
-        private set
 
     fun onNameChange(newName: String) = run { name = newName }
     fun onBreedChange(newBreed: String) = run { breed = newBreed }
     fun onAgeChange(newAge: String) = run { age = newAge }
+
+    fun clearProfilePicture() {
+        profilePicture = ""
+    }
 
     fun login(
         onLoginSuccess: () -> Unit
