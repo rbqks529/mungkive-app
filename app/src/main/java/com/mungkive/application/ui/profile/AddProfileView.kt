@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -83,7 +84,7 @@ fun AddProfileView(
             singleLine = true,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(56.dp),
+                .defaultMinSize(minHeight = 56.dp),
             shape = RoundedCornerShape(8.dp)
         )
 
@@ -97,7 +98,7 @@ fun AddProfileView(
             singleLine = true,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(56.dp),
+                .defaultMinSize(minHeight = 56.dp),
             shape = RoundedCornerShape(8.dp)
         )
 
@@ -112,7 +113,7 @@ fun AddProfileView(
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier
                 .fillMaxWidth()
-                .height(56.dp),
+                .defaultMinSize(minHeight = 56.dp),
             shape = RoundedCornerShape(8.dp)
         )
 

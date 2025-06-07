@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -93,7 +94,7 @@ fun RegisterView(
             singleLine = true,
             modifier = Modifier
                 .fillMaxWidth(0.85f)
-                .height(56.dp),
+                .defaultMinSize(minHeight = 56.dp),
             shape = RoundedCornerShape(8.dp)
         )
 
@@ -109,7 +110,7 @@ fun RegisterView(
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             modifier = Modifier
                 .fillMaxWidth(0.85f)
-                .height(56.dp),
+                .defaultMinSize(minHeight = 56.dp),
             shape = RoundedCornerShape(8.dp)
         )
 
@@ -125,7 +126,7 @@ fun RegisterView(
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             modifier = Modifier
                 .fillMaxWidth(0.85f)
-                .height(56.dp),
+                .defaultMinSize(minHeight = 56.dp),
             shape = RoundedCornerShape(8.dp)
         )
 
