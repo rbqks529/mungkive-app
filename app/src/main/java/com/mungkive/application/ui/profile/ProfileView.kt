@@ -3,7 +3,6 @@ import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -17,7 +16,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -36,17 +34,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
-import com.mungkive.application.R
-import com.mungkive.application.models.ProfileViewStatus
 import com.mungkive.application.viewmodels.ApiTestViewModel
-import com.mungkive.application.viewmodels.ProfileViewModel
 
 @SuppressLint("ViewModelConstructorInComposable")
 @Composable
@@ -64,7 +58,7 @@ fun ProfileView(
             val bytes = context.contentResolver.openInputStream(uri)?.use { it.readBytes() }
             bytes?.let {
                 val base64 = android.util.Base64.encodeToString(it, android.util.Base64.NO_WRAP)
-                viewModel.profilePicture = base64
+                viewModel.updateProfilePicture(base64)
             }
         }
 
@@ -121,24 +115,44 @@ fun ProfileView(
 
         Spacer(modifier = Modifier.height(50.dp))
 
-        val hasPhoto = viewModel.profilePicture.isNotBlank()
+        val imageModel: Any? = when {
+            viewModel.profilePictureBase64.isNotBlank() ->
+                "data:image/*;base64,${viewModel.profilePictureBase64}"
+            viewModel.profilePictureUrl.isNotBlank() ->
+                viewModel.profilePictureUrl
+            else -> null
+        }
 
-        if (hasPhoto) {
-            val dataUri = "data:image/*;base64,${viewModel.profilePicture}"
+        if (imageModel != null) {
             AsyncImage(
-                model = dataUri,
+                model = imageModel,
                 contentDescription = null,
-                modifier = Modifier.size(180.dp)
-                    .clip(CircleShape)
-                    .clickable { viewModel.clearProfilePicture() }
+                modifier = if (isEditing) {
+                    Modifier.size(180.dp)
+                        .clip(CircleShape)
+                        .clickable { viewModel.clearProfilePicture() }
+                } else {
+                    Modifier.size(180.dp)
+                        .clip(CircleShape)
+                }
             )
         } else {
             Box(
                 contentAlignment = Alignment.Center,
-                modifier = Modifier.size(180.dp)
-                    .clip(CircleShape)
-                    .clickable { pickImageLauncher.launch("image/*") }
-                    .background(Color(0xFFE5E5E5))
+                modifier = if (isEditing) {
+                    Modifier.size(180.dp)
+                        .clip(CircleShape)
+                        .clickable {
+                            if (isEditing) {
+                                pickImageLauncher.launch("image/*")
+                            }
+                        }
+                        .background(Color(0xFFE5E5E5))
+                } else {
+                    Modifier.size(180.dp)
+                        .clip(CircleShape)
+                        .background(Color(0xFFE5E5E5))
+                }
             ) {
                 Text(
                     text = "+",

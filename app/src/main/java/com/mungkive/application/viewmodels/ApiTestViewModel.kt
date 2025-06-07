@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mungkive.application.core.TokenManager
 import com.mungkive.application.network.ApiService
+import com.mungkive.application.network.NetworkModule.BASE_URL
 import com.mungkive.application.network.dto.LoginRequest
 import com.mungkive.application.network.dto.ProfileEditRequest
 import com.mungkive.application.network.dto.RegisterRequest
@@ -41,14 +42,22 @@ class ApiTestViewModel(
         private set
     var age by mutableStateOf("")
         private set
-    var profilePicture by mutableStateOf("")
+    var profilePictureBase64 by mutableStateOf("")
+        private set
+    var profilePictureUrl by mutableStateOf("")
+        private set
 
     fun onNameChange(newName: String) = run { name = newName }
     fun onBreedChange(newBreed: String) = run { breed = newBreed }
     fun onAgeChange(newAge: String) = run { age = newAge }
 
+    fun updateProfilePicture(base64: String) {
+        profilePictureBase64 = base64
+    }
+
     fun clearProfilePicture() {
-        profilePicture = ""
+        profilePictureBase64 = ""
+        profilePictureUrl = ""
     }
 
     fun login(
@@ -88,15 +97,19 @@ class ApiTestViewModel(
         onSuccess: (success: Boolean) -> Unit,
     ) = viewModelScope.launch {
         try {
+            val picPayload = if (profilePictureBase64.isNotBlank()) {
+                profilePictureBase64
+            } else {
+                ""
+            }
+
+            Log.i("editProfile", "picPayload: $picPayload")
+
             val rsp = api.editProfile(ProfileEditRequest(
                 name = name,
                 breed = breed,
-                age = if (age.toIntOrNull() != null) {
-                    age.toInt()
-                } else {
-                    0
-                },
-                profilePicture = profilePicture
+                age = age.toIntOrNull() ?: 0,
+                profilePicture = picPayload
             ))
             val result = rsp.message
             onSuccess(true)
@@ -113,7 +126,13 @@ class ApiTestViewModel(
             name = rsp.name
             breed = rsp.breed
             age = rsp.age.toString()
-            profilePicture = rsp.profilePicture
+
+            profilePictureUrl = if (rsp.profilePicture.contains("uploads/")) {
+                "${BASE_URL}/${rsp.profilePicture}"
+            } else {
+                ""
+            }
+            profilePictureBase64 = ""
         } catch (e: Exception) {
             apiResult = "Profile Failed: ${e.localizedMessage}"
         }
