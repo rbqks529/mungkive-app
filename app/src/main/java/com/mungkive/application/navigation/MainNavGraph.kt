@@ -13,7 +13,6 @@ import com.mungkive.application.models.Routes
 import com.mungkive.application.ui.feed.FeedDetailView
 import com.mungkive.application.ui.feed.FeedViewModel
 import com.mungkive.application.ui.feed.FeedAddView
-import com.mungkive.application.ui.map.MapView
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
