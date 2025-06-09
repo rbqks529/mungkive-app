@@ -1,4 +1,4 @@
-package com.mungkive.application.ui.map
+package com.mungkive.application.ui.map.ImageConverter
 
 import android.graphics.Bitmap
 import android.graphics.Canvas

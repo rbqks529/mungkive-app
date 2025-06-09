@@ -13,10 +13,10 @@ import com.mungkive.application.models.Routes
 import com.mungkive.application.ui.feed.FeedDetailView
 import com.mungkive.application.ui.feed.FeedViewModel
 import com.mungkive.application.ui.feed.FeedAddView
-import com.mungkive.application.ui.map.MapView
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import com.mungkive.application.ui.map.MapScreen
 import androidx.compose.ui.platform.LocalContext
 import com.mungkive.application.core.TokenManager
 import com.mungkive.application.network.NetworkModule
@@ -52,9 +52,9 @@ fun MainNavGraph(
                 feedViewModel.fetchFeeds()
             }
 
-            MapView(
+            MapScreen(
                 feedList = feedList,
-                onFeedSelected = { feedId ->
+                onFeedClicked = { feedId ->
                     navController.navigate("${Routes.DetailFeed.route}/$feedId")
                 }
             )
