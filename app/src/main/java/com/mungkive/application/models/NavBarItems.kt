@@ -23,7 +23,7 @@ object NavBarItems {
             route = Routes.Tip.route
         ),
         BarItem(
-            title = "프로핑",
+            title = "프로필",
             selectIcon = R.drawable.ic_profile,
             onSelectedIcon = R.drawable.ic_profile_on,
             route = Routes.Profile.route

@@ -31,11 +31,11 @@ class ProfileViewModel() : ViewModel() {
 
     // fetch profile data from server
     fun fetchProfileData() {
-        TODO()
+        //
     }
 
     // upload profile data to server
     fun uploadProfileData() {
-        TODO()
+        //
     }
 }

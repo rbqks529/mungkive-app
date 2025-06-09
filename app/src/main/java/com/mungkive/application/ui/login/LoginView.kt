@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,6 +17,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,13 +37,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mungkive.application.R
+import com.mungkive.application.viewmodels.ApiTestViewModel
 
 @Composable
 fun LoginView(
     modifier: Modifier = Modifier,
+    viewModel: ApiTestViewModel,
+    onLoginSuccess: () -> Unit,
+    onRegisterClick: () -> Unit
 ) {
-    var idText by remember { mutableStateOf("") }
-    var passwordText by remember { mutableStateOf("") }
+    LaunchedEffect(Unit) {
+        viewModel::clearIdAndPw
+    }
 
     Column(
         modifier = modifier
@@ -78,13 +85,13 @@ fun LoginView(
 
         // 아이디 입력
         OutlinedTextField(
-            value = idText,
-            onValueChange = { idText = it },
+            value = viewModel.id,
+            onValueChange = viewModel::onIdChange,
             label = { Text("아이디") },
             singleLine = true,
             modifier = Modifier
                 .fillMaxWidth(0.85f)
-                .height(56.dp),
+                .defaultMinSize(minHeight = 56.dp),
             shape = RoundedCornerShape(8.dp)
         )
 
@@ -92,15 +99,15 @@ fun LoginView(
 
         // 비밀번호 입력
         OutlinedTextField(
-            value = passwordText,
-            onValueChange = { passwordText = it },
+            value = viewModel.pw,
+            onValueChange = viewModel::onPwChange,
             label = { Text("비밀번호") },
             singleLine = true,
             visualTransformation = PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             modifier = Modifier
                 .fillMaxWidth(0.85f)
-                .height(56.dp),
+                .defaultMinSize(minHeight = 56.dp),
             shape = RoundedCornerShape(8.dp)
         )
 
@@ -113,7 +120,9 @@ fun LoginView(
         ) {
             Button(
                 onClick = {
-                    // TODO: Login Process
+                    viewModel.login {
+                        onLoginSuccess()
+                    }
                 },
                 shape = RoundedCornerShape(50.dp),
                 colors = ButtonDefaults.buttonColors(
@@ -129,7 +138,7 @@ fun LoginView(
 
             Button(
                 onClick = {
-                    // TODO: Register Process
+                    onRegisterClick()
                 },
                 shape = RoundedCornerShape(50.dp),
                 colors = ButtonDefaults.buttonColors(
@@ -146,10 +155,4 @@ fun LoginView(
 
         Spacer(modifier = Modifier.height(20.dp))
     }
-}
-
-@Preview
-@Composable
-private fun LoginViewPreview() {
-    LoginView()
 }
