@@ -17,6 +17,7 @@ import com.mungkive.application.ui.map.MapView
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import com.mungkive.application.ui.map.MapScreen
 import com.mungkive.application.ui.tip.TipListView
 
 @Composable
@@ -38,9 +39,9 @@ fun MainNavGraph(
                 feedViewModel.fetchFeeds()
             }
 
-            MapView(
+            MapScreen(
                 feedList = feedList,
-                onFeedSelected = { feedId ->
+                onFeedClicked = { feedId ->
                     navController.navigate("${Routes.DetailFeed.route}/$feedId")
                 }
             )
