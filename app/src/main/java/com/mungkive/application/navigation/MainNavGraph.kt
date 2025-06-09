@@ -80,7 +80,7 @@ fun MainNavGraph(
                 viewModel = viewModel
             )
         }
-        composable(Routes.FeedWrite.route) { FeedAddView(navController) }
+        composable(Routes.FeedWrite.route) { FeedAddView(navController, postRepository) }
 
         // 상세 페이지
         composable(Routes.DetailFeed.route + "/{feedId}") { backStackEntry ->
