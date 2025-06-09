@@ -1,4 +1,4 @@
-package com.mungkive.application.ui.map
+package com.mungkive.application.ui.map.ImageConverter
 
 import android.content.Context
 import coil3.Bitmap
