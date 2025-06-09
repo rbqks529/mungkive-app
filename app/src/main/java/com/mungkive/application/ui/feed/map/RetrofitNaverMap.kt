@@ -5,7 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitNaverMap {
     val retrofit = Retrofit.Builder()
-        .baseUrl("https://naveropenapi.apigw.ntruss.com/")
+        .baseUrl("https://maps.apigw.ntruss.com/")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 

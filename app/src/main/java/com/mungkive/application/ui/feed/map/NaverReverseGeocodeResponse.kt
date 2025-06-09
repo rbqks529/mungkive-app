@@ -1,5 +1,3 @@
-package com.mungkive.application.ui.feed.map
-
 data class NaverReverseGeocodeResponse(
     val results: List<Result>
 ) {
@@ -9,9 +7,28 @@ data class NaverReverseGeocodeResponse(
         val region: Region?,
         val land: Land?
     )
-    data class Code(val id: String?, val type: String?, val mappingId: String?)
-    data class Region(val area1: Area?, val area2: Area?, val area3: Area?, val area4: Area?)
-    data class Area(val name: String?)
-    data class Land(val name: String?, val number1: String?, val addition0: String?, val addition1: String?, val type: String?, val number2: String?, val addition2: String?)
-}
 
+    data class Code(val id: String?, val type: String?, val mappingId: String?)
+
+    data class Region(
+        val area1: Area?,
+        val area2: Area?,
+        val area3: Area?,
+        val area4: Area?
+    )
+
+    data class Area(val name: String?)
+
+    data class Land(
+        val name: String?, val number1: String?, val number2: String?,
+        val type: String?,
+        val addition0: AdditionInfo?,
+        val addition1: AdditionInfo?,
+        val addition2: AdditionInfo?
+    )
+
+    data class AdditionInfo(
+        val type: String?,
+        val value: String?
+    )
+}
