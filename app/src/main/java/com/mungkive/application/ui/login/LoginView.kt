@@ -1,5 +1,6 @@
 package com.mungkive.application.ui.login
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -25,6 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -49,6 +51,8 @@ fun LoginView(
     LaunchedEffect(Unit) {
         viewModel::clearIdAndPw
     }
+
+    val context = LocalContext.current
 
     Column(
         modifier = modifier
@@ -120,8 +124,12 @@ fun LoginView(
         ) {
             Button(
                 onClick = {
-                    viewModel.login {
-                        onLoginSuccess()
+                    viewModel.login { success ->
+                        if (success) {
+                            onLoginSuccess()
+                        } else {
+                            Toast.makeText(context, "로그인 요청 횟수를 초과했습니다. (1일 5회)", Toast.LENGTH_SHORT).show()
+                        }
                     }
                 },
                 shape = RoundedCornerShape(50.dp),

@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mungkive.application.core.RequestLimiter
 import com.mungkive.application.core.TokenManager
 import com.mungkive.application.network.ApiService
 import com.mungkive.application.network.NetworkModule.BASE_URL
@@ -13,6 +14,12 @@ import com.mungkive.application.network.dto.LoginRequest
 import com.mungkive.application.network.dto.ProfileEditRequest
 import com.mungkive.application.network.dto.RegisterRequest
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
+
+object RequestLimits {
+    val LOGIN = RequestLimiter("AuthLimit", 5,  TimeUnit.DAYS.toMillis(1))
+    val LIKES = RequestLimiter("LikeLimit",10, TimeUnit.HOURS.toMillis(1))
+}
 
 class ApiTestViewModel(
     private val api: ApiService,
@@ -61,8 +68,14 @@ class ApiTestViewModel(
     }
 
     fun login(
-        onLoginSuccess: () -> Unit
+        onLoginSuccess: (success: Boolean) -> Unit
     ) = viewModelScope.launch {
+        if (!RequestLimits.LOGIN.tryAcquire()) {
+            apiResult = "Login blocked: daily limit exceeded"
+            onLoginSuccess(false)
+            return@launch
+        }
+
         try {
             val rsp = api.login(LoginRequest(id, pw))
             token = rsp.token
@@ -70,9 +83,10 @@ class ApiTestViewModel(
             tokenManager.saveCredentials(id, pw)
             Log.i("Auth", "token: $token")
             apiResult = "Login Success"
-            onLoginSuccess()
+            onLoginSuccess(true)
         } catch (e: Exception) {
             apiResult = "Login Failed: ${e.localizedMessage}"
+            onLoginSuccess(false)
         }
     }
 
