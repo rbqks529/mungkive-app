@@ -41,6 +41,7 @@ data class PostResponse(
     val likes: Int,
     val commentCount: Int,
     val date: String,
+    val isLiked: Boolean,
 )
 
 // dto/CommentDto.kt
