@@ -9,6 +9,7 @@ import com.mungkive.application.ui.feed.data.FeedData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlin.Boolean
 
 class FeedViewModel(
     private val postRepository: PostRepository
@@ -55,7 +56,8 @@ class FeedViewModel(
                         likes = post.likes,
                         commentCount = post.commentCount, // 새 필드 반영
                         date = post.date,
-                        content = post.content
+                        content = post.content,
+                        isLiked =  post.isLiked
                     )
                 }
                 _feedList.value = feedList
@@ -95,7 +97,8 @@ class FeedViewModel(
                         likes = post.likes,
                         commentCount = post.commentCount, // 새 필드 반영
                         date = post.date,
-                        content = post.content
+                        content = post.content,
+                        isLiked =  post.isLiked
                     )
                 }
                 _feedList.value = feedList

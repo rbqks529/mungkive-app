@@ -10,6 +10,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import com.mungkive.application.network.NetworkModule
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -166,8 +167,9 @@ fun FeedAddView(
                 } else {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center,
                         modifier = Modifier
-                            .wrapContentSize()
+                            .fillMaxSize()
                             .clickable {
                                 if (galleryPermissionState.status.isGranted) {
                                     pickImageLauncher.launch("image/*")
