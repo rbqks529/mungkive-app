@@ -34,6 +34,9 @@ class FeedViewModel(
     private val _isAddingComment = MutableStateFlow(false)
     val isAddingComment: StateFlow<Boolean> = _isAddingComment
 
+    private val _isLiking = MutableStateFlow(false)
+    val isLiking: StateFlow<Boolean> = _isLiking
+
     fun fetchFeeds() {
         viewModelScope.launch {
             _isLoading.value = true
@@ -163,6 +166,33 @@ class FeedViewModel(
                 Log.d("FeedViewModel", "Error adding comment: ${e.message}")
             } finally {
                 _isAddingComment.value = false
+            }
+        }
+    }
+
+    fun toggleLike(feedId: String) {
+        viewModelScope.launch {
+            _isLiking.value = true
+            try {
+                val postId = feedId.toLongOrNull() ?: return@launch
+                val currentFeed = getFeedById(feedId) ?: return@launch
+
+                if (currentFeed.isLiked) {
+                    // 좋아요 취소
+                    val response = postRepository.unlikePost(postId)
+                    Log.d("FeedViewModel", "Unlike successful: ${response.message}")
+                } else {
+                    // 좋아요 추가
+                    val response = postRepository.likePost(postId)
+                    Log.d("FeedViewModel", "Like successful: ${response.message}")
+                }
+
+                fetchFeeds()
+
+            } catch (e: Exception) {
+                Log.d("FeedViewModel", "Error toggling like: ${e.message}")
+            } finally {
+                _isLiking.value = false
             }
         }
     }

@@ -28,4 +28,12 @@ class PostRepository(
     suspend fun addComment(postId: Long, request: CommentCreateRequest): MsgResponse {
         return apiService.addComment(postId, request)
     }
+
+    suspend fun likePost(postId: Long): MsgResponse {
+        return apiService.likePost(postId)
+    }
+
+    suspend fun unlikePost(postId: Long): MsgResponse {
+        return apiService.unlikePost(postId)
+    }
 }

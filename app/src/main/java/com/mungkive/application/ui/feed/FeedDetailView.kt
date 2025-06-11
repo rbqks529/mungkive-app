@@ -133,7 +133,7 @@ fun FeedDetailView(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 IconButton(
-                    onClick = { },
+                    onClick = { viewModel.toggleLike(feedId) },
                     modifier = Modifier.size(22.dp)
                 ) {
                     Icon(

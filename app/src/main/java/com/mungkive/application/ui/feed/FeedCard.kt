@@ -97,7 +97,7 @@ fun FeedCard(feed: FeedData, onClick: () -> Unit, iconToggle: ()->Unit) {
             ) {
                 // TODO: 좋아요 로직 추가 필요
                 IconButton(
-                    onClick = {},
+                    onClick = {iconToggle},
                     modifier = Modifier
                         .size(22.dp)
                 ) {
