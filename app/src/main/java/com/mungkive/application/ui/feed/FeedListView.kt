@@ -77,7 +77,7 @@ fun FeedListView(
                 }
 
                 items(feedList) { feedData ->
-                    FeedCard(feed = feedData, onClick = { onFeedClick(feedData) })
+                    FeedCard(feed = feedData, onClick = { onFeedClick(feedData)}, iconToggle ={ viewModel.toggleLike(feedId = feedData.id) })
                 }
             }
         }

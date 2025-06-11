@@ -3,6 +3,7 @@ package com.mungkive.application.ui.feed
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mungkive.application.network.dto.CommentCreateRequest
 import com.mungkive.application.repository.PostRepository
 import com.mungkive.application.ui.feed.data.CommentData
 import com.mungkive.application.ui.feed.data.FeedData
@@ -29,6 +30,12 @@ class FeedViewModel(
     // 새로고침 상태 추가
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing: StateFlow<Boolean> = _isRefreshing
+
+    private val _isAddingComment = MutableStateFlow(false)
+    val isAddingComment: StateFlow<Boolean> = _isAddingComment
+
+    private val _isLiking = MutableStateFlow(false)
+    val isLiking: StateFlow<Boolean> = _isLiking
 
     fun fetchFeeds() {
         viewModelScope.launch {
@@ -136,6 +143,56 @@ class FeedViewModel(
                 _commentsMap.value = currentMap
             } catch (e: Exception) {
                 Log.d("FeedVIewModel", "Error fetching comments: ${e.message}")
+            }
+        }
+    }
+    // 댓글 추가
+    fun addComment(feedId: String, content:String, onSuccess: () -> Unit){
+        viewModelScope.launch {
+            _isAddingComment.value = true
+            try {
+                val postId = feedId.toLongOrNull() ?: return@launch
+
+                // 서버에 댓글 추가 요청
+                val request = CommentCreateRequest(content)
+                val response = postRepository.addComment(postId, request)
+
+                // 댓글 추가 성공 시 댓글 목록을 새로 불러오기
+                fetchComments(feedId)
+
+                onSuccess()
+                Log.d("FeedViewModel", "Comment added successfully: ${response.message}")
+            } catch (e: Exception) {
+                Log.d("FeedViewModel", "Error adding comment: ${e.message}")
+            } finally {
+                _isAddingComment.value = false
+            }
+        }
+    }
+
+    fun toggleLike(feedId: String) {
+        viewModelScope.launch {
+            _isLiking.value = true
+            try {
+                val postId = feedId.toLongOrNull() ?: return@launch
+                val currentFeed = getFeedById(feedId) ?: return@launch
+
+                if (currentFeed.isLiked) {
+                    // 좋아요 취소
+                    val response = postRepository.unlikePost(postId)
+                    Log.d("FeedViewModel", "Unlike successful: ${response.message}")
+                } else {
+                    // 좋아요 추가
+                    val response = postRepository.likePost(postId)
+                    Log.d("FeedViewModel", "Like successful: ${response.message}")
+                }
+
+                fetchFeeds()
+
+            } catch (e: Exception) {
+                Log.d("FeedViewModel", "Error toggling like: ${e.message}")
+            } finally {
+                _isLiking.value = false
             }
         }
     }
