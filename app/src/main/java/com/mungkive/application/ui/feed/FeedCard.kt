@@ -37,7 +37,7 @@ import com.mungkive.application.R
 import com.mungkive.application.ui.feed.data.FeedData
 
 @Composable
-fun FeedCard(feed: FeedData, onClick: () -> Unit) {
+fun FeedCard(feed: FeedData, onClick: () -> Unit, iconToggle: ()->Unit) {
 
     Card(
         shape = RoundedCornerShape(20.dp),
@@ -95,7 +95,7 @@ fun FeedCard(feed: FeedData, onClick: () -> Unit) {
                 Modifier.padding(start = 10.dp, top = 9.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // TODO: 좋아요 로직 
+                // TODO: 좋아요 로직 추가 필요
                 IconButton(
                     onClick = {},
                     modifier = Modifier
@@ -168,5 +168,5 @@ fun FeedCardPreview() {
         content = "오늘 즐거운 산책~",
         isLiked = true
     )
-    FeedCard(feed = sampleFeed, onClick = {})
+    FeedCard(feed = sampleFeed, onClick = {}, iconToggle = {})
 }

@@ -1,7 +1,9 @@
 package com.mungkive.application.repository
 
 import com.mungkive.application.network.ApiService
+import com.mungkive.application.network.dto.CommentCreateRequest
 import com.mungkive.application.network.dto.CommentResponse
+import com.mungkive.application.network.dto.MsgResponse
 import com.mungkive.application.network.dto.PostCreateRequest
 import com.mungkive.application.network.dto.PostResponse
 import retrofit2.Response
@@ -21,5 +23,9 @@ class PostRepository(
 
     suspend fun getFeeds(): List<PostResponse> {
         return apiService.listPosts()
+    }
+
+    suspend fun addComment(postId: Long, request: CommentCreateRequest): MsgResponse {
+        return apiService.addComment(postId, request)
     }
 }

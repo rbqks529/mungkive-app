@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.*
@@ -132,7 +133,7 @@ fun FeedDetailView(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 IconButton(
-                    onClick = {},
+                    onClick = { },
                     modifier = Modifier.size(22.dp)
                 ) {
                     Icon(
@@ -244,9 +245,10 @@ fun FeedDetailView(
                 value = commentText,
                 onValueChange = { commentText = it },
                 modifier = Modifier.weight(1f),
-                shape = androidx.compose.foundation.shape.RoundedCornerShape(8.dp),
+                shape = RoundedCornerShape(8.dp),
                 placeholder = { Text("댓글을 입력하세요", fontSize = 12.sp) },
                 singleLine = true,
+
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = Color(0xFFEBF3FF),
                     unfocusedBorderColor = Color(0xFFBDBDBD)
@@ -254,13 +256,24 @@ fun FeedDetailView(
             )
             Spacer(modifier = Modifier.width(8.dp))
             Button(
-                onClick = {},   // 댓글 등록 함수 작성 필요
+                onClick = {
+                    if(commentText.isNotBlank()){
+                        viewModel.addComment(
+                            feedId = feedId,
+                            content = commentText.trim(),
+                            onSuccess = {
+                                commentText = ""
+                            }
+                        )
+                    }
+                          },
                 enabled = commentText.isNotBlank(),
-                shape = androidx.compose.foundation.shape.RoundedCornerShape(6.dp),
+                shape = RoundedCornerShape(6.dp),
                 modifier = Modifier.height(50.dp)
             ) {
                 Text("입력", fontWeight = FontWeight.Bold)
             }
         }
+
     }
 }
