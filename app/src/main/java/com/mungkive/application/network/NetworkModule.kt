@@ -10,7 +10,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object NetworkModule {
-    const val BASE_URL = "http://34.47.102.235:8080"
+    const val BASE_URL = TODO()
 
     fun provideApiService(tokenManager: TokenManager, loginService: AuthService): ApiService {
         val logging = HttpLoggingInterceptor().apply {
