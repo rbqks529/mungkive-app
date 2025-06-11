@@ -95,9 +95,8 @@ fun FeedCard(feed: FeedData, onClick: () -> Unit, iconToggle: ()->Unit) {
                 Modifier.padding(start = 10.dp, top = 9.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // TODO: 좋아요 로직 추가 필요
                 IconButton(
-                    onClick = {iconToggle},
+                    onClick = {iconToggle()},
                     modifier = Modifier
                         .size(22.dp)
                 ) {

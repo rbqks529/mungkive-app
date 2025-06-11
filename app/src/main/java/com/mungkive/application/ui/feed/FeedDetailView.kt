@@ -46,7 +46,8 @@ fun FeedDetailView(
     navController: NavHostController? = null,
     modifier: Modifier = Modifier
 ) {
-    val feed = viewModel.getFeedById(feedId)
+    val feedList by viewModel.feedList.collectAsStateWithLifecycle()
+    val feed = feedList.find { it.id == feedId }
     var commentText by remember { mutableStateOf("") }
 
     LaunchedEffect(feedId) {
@@ -133,7 +134,9 @@ fun FeedDetailView(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 IconButton(
-                    onClick = { viewModel.toggleLike(feedId) },
+                    onClick = {
+                        viewModel.toggleLike(feedId)
+                              },
                     modifier = Modifier.size(22.dp)
                 ) {
                     Icon(

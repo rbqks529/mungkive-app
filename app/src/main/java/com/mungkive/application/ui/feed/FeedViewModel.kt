@@ -188,7 +188,6 @@ class FeedViewModel(
                 }
 
                 fetchFeeds()
-
             } catch (e: Exception) {
                 Log.d("FeedViewModel", "Error toggling like: ${e.message}")
             } finally {
