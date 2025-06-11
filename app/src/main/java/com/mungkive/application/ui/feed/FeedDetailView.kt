@@ -138,7 +138,7 @@ fun FeedDetailView(
                     Icon(
                         ImageVector.vectorResource(R.drawable.ic_heart),
                         contentDescription = null,
-                        tint = Color.Black,
+                        tint = if (feed.isLiked) Color.Red else Color.Black,
                         modifier = Modifier.size(18.dp)
                     )
                 }

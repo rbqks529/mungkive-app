@@ -104,7 +104,7 @@ fun FeedCard(feed: FeedData, onClick: () -> Unit) {
                     Icon(
                         ImageVector.vectorResource(R.drawable.ic_heart),
                         contentDescription = null,
-                        tint = Color.Black,
+                        tint = if (feed.isLiked) Color.Red else Color.Black,
                         modifier = Modifier.size(18.dp)
                     )
                 }
@@ -165,7 +165,8 @@ fun FeedCardPreview() {
         likes = 25,
         commentCount = 3,
         date = "2025. 5. 15. 14:32",
-        content = "오늘 즐거운 산책~"
+        content = "오늘 즐거운 산책~",
+        isLiked = true
     )
     FeedCard(feed = sampleFeed, onClick = {})
 }
