@@ -42,7 +42,8 @@ import com.mungkive.application.ui.feed.data.FeedData
 fun MapFeed(
     feed: FeedData,
     modifier: Modifier = Modifier,
-    onDetailClick: () -> Unit
+    onDetailClick: () -> Unit,
+    onToggleLike: () -> Unit
     ) {
     Card(
         shape = RoundedCornerShape(
@@ -51,17 +52,18 @@ fun MapFeed(
             bottomStart = 0.dp,
             bottomEnd = 0.dp
         ),
-        modifier = Modifier
-            .padding(horizontal = 18.dp, vertical = 6.dp)
+        modifier = modifier
+            .padding(horizontal = 4.dp, vertical = 0.dp)
             .fillMaxWidth()
-            .clip(RoundedCornerShape(
-                topStart = 20.dp,
-                topEnd = 20.dp,
-                bottomStart = 0.dp,
-                bottomEnd = 0.dp
-            )),
-            //.clickable { onClick() },
-        elevation = CardDefaults.cardElevation(2.dp),
+            .clip(
+                RoundedCornerShape(
+                    topStart = 20.dp,
+                    topEnd = 20.dp,
+                    bottomStart = 0.dp,
+                    bottomEnd = 0.dp
+                )
+            ),
+        elevation = CardDefaults.cardElevation(4.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         border = BorderStroke(1.dp, Color(0xFFECECEC))
     ) {
@@ -72,7 +74,7 @@ fun MapFeed(
                     .padding(top = 11.dp, start = 10.dp, end = 9.dp, bottom = 6.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                // 프로필 사진
+                Spacer(Modifier.size(3.dp))
                 AsyncImage(
                     model = feed.userPic,
                     contentDescription = null,
@@ -95,36 +97,70 @@ fun MapFeed(
                 )
                 Text(feed.locName, fontSize = 10.sp, color = Color(0xFF7B7B7B))
             }
-
-            /*AsyncImage(
-                model = feed.picture,
-                contentDescription = null,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(250.dp),
-                contentScale = ContentScale.Crop
-            )*/
-
-            // 좋아요/댓글/날짜/내용
-
             Row(
                 Modifier
                     .fillMaxWidth()
-                    .height(52.dp)
-                    .padding(start = 10.dp, end = 9.dp)
-                    .clickable{ onDetailClick() },
+                    .padding(start = 6.dp, end = 5.dp)
+                    .clickable { onDetailClick() },
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Column(
 
                 ) {
-                    Text(
-                        text = feed.date,
-                        fontSize = 8.sp,
-                        color = Color(0xFF7B7B7B),
-                        modifier = Modifier.padding(start = 10.dp, top = 2.dp)
-                    )
+                    Row {
+                        Text(
+                            text = feed.date,
+                            fontSize = 8.sp,
+                            color = Color(0xFF7B7B7B),
+                            modifier = Modifier.padding(start = 10.dp, top = 2.dp)
+                        )
+                        Spacer(modifier = Modifier.weight(1f))
+                        Row(
+                            modifier = Modifier.padding(end = 4.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+
+                            ) {
+                            // TODO: 좋아요 로직
+                            IconButton(
+                                onClick = {onToggleLike()},
+                                modifier = Modifier
+                                    .size(22.dp)
+                            ) {
+                                Icon(
+                                    ImageVector.vectorResource(R.drawable.ic_heart),
+                                    contentDescription = null,
+                                    tint = if(feed.isLiked) Color.Red else Color.Black,
+                                    modifier = Modifier.size(16.dp)
+                                )
+                            }
+                            Text(
+                                text = "${feed.likes}",
+                                fontSize = 10.sp,
+                                modifier = Modifier.padding(start = 2.dp, end = 12.dp)
+                            )
+
+                            // TODO: 댓글 로직
+                            IconButton(
+                                onClick = {},
+                                modifier = Modifier
+                                    .size(22.dp)
+                            ) {
+                                Icon(
+                                    ImageVector.vectorResource(R.drawable.ic_comment),
+                                    contentDescription = null,
+                                    tint = Color.Black,
+                                    modifier = Modifier.size(16.dp)
+                                )
+                            }
+                            Text(
+                                "${feed.commentCount}",
+                                fontSize = 10.sp,
+                                modifier = Modifier.padding(start = 2.dp)
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.size(3.dp))
                     Text(
                         text = feed.content,
                         fontWeight = FontWeight.W500,
@@ -132,49 +168,6 @@ fun MapFeed(
                         modifier = Modifier.padding(start = 10.dp, bottom = 17.dp, end = 9.dp),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis // ... 표시
-                    )
-                }
-                Row(
-                    Modifier.padding(start = 10.dp, top = 9.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-
-                ) {
-                    // TODO: 좋아요 로직
-                    IconButton(
-                        onClick = {},
-                        modifier = Modifier
-                            .size(22.dp)
-                    ) {
-                        Icon(
-                            ImageVector.vectorResource(R.drawable.ic_heart),
-                            contentDescription = null,
-                            tint = Color.Black,
-                            modifier = Modifier.size(18.dp)
-                        )
-                    }
-                    Text(
-                        text = "${feed.likes}",
-                        fontSize = 10.sp,
-                        modifier = Modifier.padding(start = 2.dp, end = 12.dp)
-                    )
-
-                    // TODO: 댓글 로직
-                    IconButton(
-                        onClick = {},
-                        modifier = Modifier
-                            .size(22.dp)
-                    ) {
-                        Icon(
-                            ImageVector.vectorResource(R.drawable.ic_comment),
-                            contentDescription = null,
-                            tint = Color.Black,
-                            modifier = Modifier.size(18.dp)
-                        )
-                    }
-                    Text(
-                        "${feed.commentCount}",
-                        fontSize = 10.sp,
-                        modifier = Modifier.padding(start = 2.dp)
                     )
                 }
             }
@@ -191,6 +184,7 @@ private fun MapFeedPreview() {
         userName = "보리",
         userBreed = "포메라니안",
         locName = "올림픽공원",
+        locate = "",
         picture = "https://images.unsplash.com/photo-1518717758536-85ae29035b6d?auto=format&fit=crop&w=600&q=80",
         likes = 25,
         commentCount = 3,
@@ -198,5 +192,5 @@ private fun MapFeedPreview() {
         content = "오늘 즐거운 산책~",
         isLiked = false
     )
-//    MapFeed(temp)
+    MapFeed(temp, onDetailClick = {}, onToggleLike = {})
 }

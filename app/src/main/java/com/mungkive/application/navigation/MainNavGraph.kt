@@ -43,19 +43,28 @@ fun MainNavGraph(
         startDestination = Routes.Feed.route,
         modifier = modifier
     ) {
-        composable(Routes.Map.route) {
-            val feedViewModel: FeedViewModel = viewModel(factory = feedViewModelFactory)
+        composable(Routes.Map.route) { backStackEntry ->
+            // Feed.route와 같은 ViewModel 스코프 사용
+            val parentEntry = remember(backStackEntry) {
+                navController.getBackStackEntry(Routes.Feed.route)
+            }
+            val feedViewModel: FeedViewModel = viewModel(parentEntry, factory = feedViewModelFactory)
             val feedList by feedViewModel.feedList.collectAsState()
 
-            // ViewModel에서 데이터를 불러오도록 호출
-            LaunchedEffect(Unit) {
-                feedViewModel.fetchFeeds()
+            // 데이터가 없으면 불러오기
+            LaunchedEffect(feedList.isEmpty()) {
+                if (feedList.isEmpty()) {
+                    feedViewModel.fetchFeeds()
+                }
             }
 
             MapScreen(
                 feedList = feedList,
                 onFeedClicked = { feedId ->
                     navController.navigate("${Routes.DetailFeed.route}/$feedId")
+                },
+                onToggleLike = {feedId ->
+                    feedViewModel.toggleLike(feedId)
                 }
             )
         }

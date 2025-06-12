@@ -59,6 +59,7 @@ class FeedViewModel(
                         userName = post.userName,
                         userBreed = post.userBreed,
                         locName = post.locName,
+                        locate = post.locate,
                         picture = feedPicture,     // 게시글 사진
                         likes = post.likes,
                         commentCount = post.commentCount, // 새 필드 반영
@@ -100,6 +101,7 @@ class FeedViewModel(
                         userName = post.userName,
                         userBreed = post.userBreed,
                         locName = post.locName,
+                        locate = post.locate,
                         picture = feedPicture,     // 게시글 사진
                         likes = post.likes,
                         commentCount = post.commentCount, // 새 필드 반영

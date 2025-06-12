@@ -40,8 +40,8 @@ fun MarkerWithUrlIcon(
         Marker(
             state = rememberMarkerState(position = position),
             icon = overlay,
-            width = 50.dp,
-            height = 50.dp,
+            width = 45.dp,
+            height = 45.dp,
             onClick = {
                 onClick()
                 true
