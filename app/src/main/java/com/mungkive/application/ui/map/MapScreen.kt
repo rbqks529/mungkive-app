@@ -22,39 +22,38 @@ import com.mungkive.application.ui.feed.data.FeedData
 
 @Composable
 fun MapScreen(feedList: List<FeedData>, onFeedClicked: (String) -> Unit, onToggleLike:(String)->Unit){
-    val (selectedFeed, setSelectedFeed) = remember { mutableStateOf<FeedData?>(null) }
+    val (selectedFeedId, setSelectedFeedId) = remember { mutableStateOf<String?>(null) }
+
+    val selectedFeed = selectedFeedId?.let { feedId ->
+        feedList.find { it.id == feedId }
+    }
 
     Box(Modifier.fillMaxSize()) {
         MapView(
             feedList = feedList,
             onFeedSelected = { feedId ->
-                // feedId로 FeedData 찾기
-                setSelectedFeed(feedList.find { it.id == feedId })
+                setSelectedFeedId(feedId) // ID만 저장
             },
-            onMapClick = { setSelectedFeed(null) }
+            onMapClick = { setSelectedFeedId(null) }
         )
+
+        // 애니메이션이 있는 하단 피드 카드
         AnimatedVisibility(
-            visible = selectedFeed != null,
+            visible = selectedFeedId != null,
             enter = slideInVertically(
-                initialOffsetY = { fullHeight -> fullHeight }, // 아래에서 시작
-                animationSpec = tween(
-                    durationMillis = 300,
-                    easing = FastOutSlowInEasing
-                )
-            ) + fadeIn(animationSpec = tween(300)),
+                initialOffsetY = { it },
+                animationSpec = tween(300, easing = FastOutSlowInEasing)
+            ) + fadeIn(),
             exit = slideOutVertically(
-                targetOffsetY = { fullHeight -> fullHeight }, // 아래로 사라짐
-                animationSpec = tween(
-                    durationMillis = 250,
-                    easing = FastOutLinearInEasing
-                )
-            ) + fadeOut(animationSpec = tween(250)),
+                targetOffsetY = { it },
+                animationSpec = tween(300, easing = FastOutSlowInEasing)
+            ) + fadeOut(),
             modifier = Modifier.align(Alignment.BottomCenter)
         ) {
             selectedFeed?.let { feed ->
                 MapFeed(
                     feed = feed,
-                    modifier = Modifier.padding(bottom = 4.dp),
+                    modifier = Modifier.padding(bottom = 1.dp),
                     onDetailClick = {
                         onFeedClicked(feed.id)
                     },

@@ -53,7 +53,7 @@ fun MapFeed(
             bottomEnd = 0.dp
         ),
         modifier = modifier
-            .padding(horizontal = 4.dp, vertical = 0.dp)
+            .padding(horizontal = 2.dp, vertical = 0.dp)
             .fillMaxWidth()
             .clip(
                 RoundedCornerShape(
@@ -86,7 +86,7 @@ fun MapFeed(
 
                 // 이름, 품종, 위치
                 Column(modifier = Modifier.weight(1f)) {
-                    Text(feed.userName, fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                    Text(feed.userName, fontWeight = FontWeight.Bold, fontSize = 15.sp)
                     Text(feed.userBreed, fontSize = 10.sp, color = Color(0xFF7B7B7B))
                 }
                 Icon(
@@ -95,7 +95,10 @@ fun MapFeed(
                     modifier = Modifier.size(10.dp),
                     tint = Color.Gray
                 )
-                Text(feed.locName, fontSize = 10.sp, color = Color(0xFF7B7B7B))
+                Text(feed.locName,
+                    fontSize = 10.sp,
+                    color = Color(0xFF7B7B7B)
+                )
             }
             Row(
                 Modifier
@@ -137,26 +140,22 @@ fun MapFeed(
                             Text(
                                 text = "${feed.likes}",
                                 fontSize = 10.sp,
-                                modifier = Modifier.padding(start = 2.dp, end = 12.dp)
+                                modifier = Modifier.padding(start = 2.dp, end = 2.dp)
+                                    . width(25.dp)
                             )
 
-                            // TODO: 댓글 로직
-                            IconButton(
-                                onClick = {},
-                                modifier = Modifier
-                                    .size(22.dp)
-                            ) {
-                                Icon(
+                            Icon(
                                     ImageVector.vectorResource(R.drawable.ic_comment),
                                     contentDescription = null,
                                     tint = Color.Black,
-                                    modifier = Modifier.size(16.dp)
-                                )
-                            }
+                                    modifier = Modifier.size(20.dp)
+                                        .padding(end = 3.dp)
+                            )
                             Text(
                                 "${feed.commentCount}",
                                 fontSize = 10.sp,
-                                modifier = Modifier.padding(start = 2.dp)
+                                modifier = Modifier.padding(start = 2.dp, end = 2.dp)
+                                    .width(25.dp)
                             )
                         }
                     }
@@ -164,7 +163,7 @@ fun MapFeed(
                     Text(
                         text = feed.content,
                         fontWeight = FontWeight.W500,
-                        fontSize = 12.sp,
+                        fontSize = 14.sp,
                         modifier = Modifier.padding(start = 10.dp, bottom = 17.dp, end = 9.dp),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis // ... 표시
@@ -186,8 +185,8 @@ private fun MapFeedPreview() {
         locName = "올림픽공원",
         locate = "",
         picture = "https://images.unsplash.com/photo-1518717758536-85ae29035b6d?auto=format&fit=crop&w=600&q=80",
-        likes = 25,
-        commentCount = 3,
+        likes = 100,
+        commentCount = 10,
         date = "2025. 5. 15. 14:32",
         content = "오늘 즐거운 산책~",
         isLiked = false
