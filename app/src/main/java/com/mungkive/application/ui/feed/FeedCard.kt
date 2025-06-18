@@ -87,7 +87,7 @@ fun FeedCard(feed: FeedData, onClick: () -> Unit, iconToggle: ()->Unit) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(250.dp),
-                contentScale = ContentScale.Fit
+                contentScale = ContentScale.Crop
             )
 
             // 좋아요/댓글/날짜/내용
