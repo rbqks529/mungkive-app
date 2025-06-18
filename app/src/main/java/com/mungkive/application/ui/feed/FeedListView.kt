@@ -27,6 +27,10 @@ fun FeedListView(
     val isLoading by viewModel.isLoading.collectAsState()
     val isRefreshing by viewModel.isRefreshing.collectAsState()
 
+    val sortedFeedList = remember(feedList) {
+        feedList.sortedByDescending { it.id.toInt() }
+    }
+
     val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = isRefreshing)
 
     // 최초 진입 시 서버에서 피드 데이터 가져오기
@@ -76,7 +80,7 @@ fun FeedListView(
                     )
                 }
 
-                items(feedList) { feedData ->
+                items(sortedFeedList) { feedData ->
                     FeedCard(feed = feedData, onClick = { onFeedClick(feedData)}, iconToggle ={ viewModel.toggleLike(feedId = feedData.id) })
                 }
             }
