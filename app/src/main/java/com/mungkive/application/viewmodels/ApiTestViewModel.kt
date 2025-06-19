@@ -1,5 +1,7 @@
 package com.mungkive.application.viewmodels
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -13,8 +15,14 @@ import com.mungkive.application.network.NetworkModule.BASE_URL
 import com.mungkive.application.network.dto.LoginRequest
 import com.mungkive.application.network.dto.ProfileEditRequest
 import com.mungkive.application.network.dto.RegisterRequest
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.ByteArrayOutputStream
+import java.net.HttpURLConnection
+import java.net.URL
 import java.util.concurrent.TimeUnit
+import android.util.Base64
 
 object RequestLimits {
     val LOGIN = RequestLimiter("AuthLimit", 5,  TimeUnit.DAYS.toMillis(1))
@@ -146,7 +154,12 @@ class ApiTestViewModel(
             } else {
                 ""
             }
-            profilePictureBase64 = ""
+
+            viewModelScope.launch {
+                val b64 = imageUrlToBase64(profilePictureUrl)
+                profilePictureBase64 = b64 ?: ""
+            }
+
         } catch (e: Exception) {
             apiResult = "Profile Failed: ${e.localizedMessage}"
         }
@@ -184,4 +197,45 @@ class ApiTestViewModel(
             apiResult = "Post Failed: ${e.localizedMessage}"
         }
     }*/
+
+    suspend fun imageUrlToBase64(imageUrl: String): String? = withContext(Dispatchers.IO) {
+        var connection: HttpURLConnection? = null
+
+        Log.i("imageUrlToBase64", "imageUrl: $imageUrl")
+
+        try {
+            // 1) URL 연결 열기
+            val url = URL(imageUrl)
+            connection = (url.openConnection() as? HttpURLConnection)?.apply {
+                doInput = true
+                connectTimeout = 10_000
+                readTimeout = 10_000
+                requestMethod = "GET"
+            }
+            connection?.connect()
+
+            // 2) HTTP 200 OK 확인
+            if (connection?.responseCode != HttpURLConnection.HTTP_OK) {
+                return@withContext null
+            }
+
+            // 3) 스트림에서 Bitmap 생성
+            val inputStream = connection.inputStream
+            val bitmap = BitmapFactory.decodeStream(inputStream)
+                ?: return@withContext null
+
+            // 4) Bitmap을 JPEG로 압축해 바이트 배열로 변환
+            val outputStream = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.PNG, 90, outputStream)
+            val byteArray = outputStream.toByteArray()
+
+            // 5) Base64 인코딩
+            Base64.encodeToString(byteArray, Base64.NO_WRAP)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        } finally {
+            connection?.disconnect()
+        }
+    }
 }
