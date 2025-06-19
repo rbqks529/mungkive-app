@@ -33,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -127,6 +128,7 @@ fun ProfileView(
             AsyncImage(
                 model = imageModel,
                 contentDescription = null,
+                contentScale = ContentScale.Crop,
                 modifier = if (isEditing) {
                     Modifier.size(180.dp)
                         .clip(CircleShape)
@@ -154,12 +156,14 @@ fun ProfileView(
                         .background(Color(0xFFE5E5E5))
                 }
             ) {
-                Text(
-                    text = "+",
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 40.sp
-                )
+                if (isEditing) {
+                    Text(
+                        text = "+",
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 40.sp
+                    )
+                }
             }
         }
 
@@ -199,7 +203,7 @@ fun ProfileView(
         OutlinedTextField(
             value = viewModel.age,
             onValueChange = viewModel::onAgeChange,
-            label = { Text("나이") },
+            label = { Text("생년") },
             singleLine = true,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier
